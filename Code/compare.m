@@ -30,6 +30,5 @@ points2 = detectHarrisFeatures(I2);
 
  indexPairs = matchFeatures(features1, features2);
  disp(indexPairs);
-% figure; showMatchedFeatures(I1, I2, matchedPoints1, matchedPoints2);
 end
 end
