@@ -1,4 +1,3 @@
-__author__ = 'darka'
 import sqlite3
 import os
 import sys
@@ -52,5 +51,3 @@ def download_image_from_article_list(article_list, db_name, table_name):
                 db.execute("insert into " + table_name + " values (NULL,\'"+str(img_link)+'\',\''+str(img_path)+'\',\''+ str(article_link)+'\');')
     db.commit()
     db.close()
-
-sqlite3.connect('.imagecache/image.db')

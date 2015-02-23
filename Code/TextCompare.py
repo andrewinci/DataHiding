@@ -1,4 +1,3 @@
-__author__ = 'darka'
 from Tagger import tag
 
 

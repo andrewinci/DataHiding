@@ -1,4 +1,3 @@
-__author__ = 'darka'
 import nltk
 from nltk.stem.snowball import SnowballStemmer
 from nltk.corpus import stopwords
