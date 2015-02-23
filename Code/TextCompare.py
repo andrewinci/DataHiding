@@ -37,3 +37,7 @@ def is_article_in_context(article, context_list):
             return False
     #print(max_sim)
     return True
+
+
+def correlated_article(base_article, articles_by_title_list, article_by_tag_list):
+    return article_by_tag_list+articles_by_title_list

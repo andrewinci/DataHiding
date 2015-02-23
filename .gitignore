@@ -1,5 +1,6 @@
 
 *.pyc
+<<<<<<< Updated upstream
 
 Doc/Testing.aux
 
@@ -12,3 +13,5 @@ Doc/Testing.out
 Doc/Testing.synctex.gz
 
 Doc/Testing.pdf
+=======
+>>>>>>> Stashed changes

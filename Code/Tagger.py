@@ -3,10 +3,12 @@ import nltk
 from nltk.stem.snowball import SnowballStemmer
 from nltk.corpus import stopwords
 
-#remove symbols
-
 
 def tag(sentence, num):
+    #remove symbols
+    import string
+    for char in string.punctuation:
+        sentence = sentence.replace(char, ' ')
     all_words = sentence.lower().split()
     # Create a frequency distribution
     stop_words = set(stopwords.words('english'))

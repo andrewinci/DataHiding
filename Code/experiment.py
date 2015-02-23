@@ -8,3 +8,5 @@ for s in simil_img:
     img_context  = db.execute("select * from context_images where id = "+ str(s[3])).fetchone()
     print(img_base[1], str(s[2]), img_context[1])
 db.close()
+
+from datetime import datetime
