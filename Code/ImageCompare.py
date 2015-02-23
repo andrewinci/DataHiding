@@ -1,3 +1,4 @@
+#TODO:problably this file is pointless
 import numpy
 from PIL import Image
 TEMP_PATH = ".imagecache/"
