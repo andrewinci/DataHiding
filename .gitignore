@@ -1,2 +1,14 @@
 
 *.pyc
+
+Doc/Testing.aux
+
+Doc/Testing.fdb_latexmk
+
+Doc/Testing.log
+
+Doc/Testing.out
+
+Doc/Testing.synctex.gz
+
+Doc/Testing.pdf
