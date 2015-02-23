@@ -8,7 +8,7 @@
 
 - Brunetta Carlo 
 - Di Bonito Jacopo
-- Vinci Andrea
+- Vinci Andrea F.
 
 ---
 
