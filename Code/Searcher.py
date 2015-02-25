@@ -29,5 +29,5 @@ def searchongoogle(text, num):
             l = str(link)[str(link).index('http'):str(link).__len__() - 1]
             if not linklist.__contains__(l):
                 linklist.append(l)
-    print('Founded ' + str(linklist.__len__()) + ' link on Google for ' + text)
+    print('Founded ' + str(linklist.__len__()) + ' link on Google for: ' + text)
     return linklist

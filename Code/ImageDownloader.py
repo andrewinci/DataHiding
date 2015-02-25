@@ -2,9 +2,10 @@ import sqlite3
 import os
 import sys
 
-'''
-path of the form bla/bla/
-'''
+
+#minimum size of an image
+MIN_IMAGE = 20000
+
 def download_data(data_link, path):
     path=str(path)
     from urllib import request
@@ -17,21 +18,23 @@ def download_data(data_link, path):
     try:
         #download image data
         img_data = request.urlopen(data_link).read()
+        #get image size
+        img_size = sys.getsizeof(img_data)
         #check the size of an image
-        if sys.getsizeof(img_data) > 20000:
+        if img_size > MIN_IMAGE:
             #get the name
             img_name = str(xxhash.xxh64(img_data).hexdigest())
             f = open(path+img_name, 'wb')
             f.write(img_data)
             f.close()
         else:
-            #print('too small')
+            #the image is too small
             return None
     except:
         print('error for download: '+str(data_link))
         return None
     #return the image name
-    return path+ img_name
+    return [path + img_name, img_size]
 
 
 def download_image_from_article_list(article_list, db_name, table_name):

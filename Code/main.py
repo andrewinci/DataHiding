@@ -1,4 +1,3 @@
-__author__ = 'darka'
 import os
 from newspaper import Article
 from Tagger import tag
@@ -15,16 +14,17 @@ def article_list_from_link_list(link_list):
             if article.text != '' and article.images.__len__()>0:
                 #check if all file in images are really image
                 img_format =['jpg', 'png', 'bmp', 'jpeg']
-                img_list = [i for i in article.images if i.split('.')[-1] in img_format]
+                img_list = [i for i in article.images if i.split('.')[-1].lower() in img_format]
                 article.images = img_list
-                #TODO:Remove
-                print('Date is present :' + str(article.publish_date))
                 articles_list.append(article)
         except:
             print('error in article_list_from_link_list :' + article_link + ' is not an article')
     return articles_list
 
-
+#number of article to be downloaded by title
+N_TITLE = 120
+#number of article to be downloaded by tags
+N_TAG = 120
 def main():
     #TODO: remove all file in cache
     if os.path.exists('cache'):
@@ -43,7 +43,7 @@ def main():
     ####SEARCH FOR ARTICLE TITLE#######
     print('Searching article by title:'+ article_title)
     #get similar articles link without the base_article
-    articles_by_title_link = [l for l in searchongoogle(article_title, 10) if l != base_article_url]
+    articles_by_title_link = [l for l in searchongoogle(article_title, N_TITLE) if l != base_article_url]
 
     #make parsed article list
     articles_by_title = article_list_from_link_list(articles_by_title_link)
@@ -53,7 +53,7 @@ def main():
     tag_research = ' '.join(tag(base_article.text, 5))
     print('Tag researched: ', tag_research)
     #get article link searched by tag
-    articles_by_tag_link = [l for l in searchongoogle(tag_research, 10) if l != base_article_url]
+    articles_by_tag_link = [l for l in searchongoogle(tag_research, N_TAG) if l != base_article_url]
 
     #make parsed article list
     articles_by_tag = article_list_from_link_list(articles_by_tag_link)
@@ -68,7 +68,9 @@ def main():
     #using a TextCompare
     from TextCompare import correlated_article
     context_article = correlated_article(base_article, articles_by_title, articles_by_tag)
-
+    print("Found " + str(context_article.__len__()) + " correlated article")
+    
+    print('Downloading and store file, this part can take several minutes ;)')
     ######STORE DATA#######
     ###MAKE DIRS STRUCTURE
     from ImageDownloader import download_image_from_article_list, download_data
@@ -93,7 +95,9 @@ def main():
                         id integer primary key autoincrement,
                         article_id integer,
                         local_path text,
-                        url text
+                        url text,
+                        size integer,
+                        allowed text
                         )''')
     #text table
     article_db.execute('''create table body (
@@ -118,10 +122,10 @@ def main():
 
         #download image
         for img in ar.images:
-            img_path = download_data(img, 'cache/image/')
-            if not img_path == None:
-                article_db.execute('insert into image values (NULL,?,?,?)',
-                                    [str(cont), str(img_path), str(img)])
+            img_down_result = download_data(img, 'cache/image/')
+            if not img_down_result == None:
+                article_db.execute('insert into image values (NULL,?,?,?,?,?)',
+                                    [str(cont), str(img_down_result[0]), str(img), str(img_down_result[1]), '0'])
 
         #download text
         import xxhash
@@ -133,32 +137,6 @@ def main():
                            [str(cont), "cache/text/" + str(f_title), ' '.join(tag(ar.text, 10))])
     article_db.commit()
     article_db.close()
-    #download_image_from_article_list(articles_by_title+articles_by_tag, 'img.db', 'context_images')
-
-    #download base images and store into db
-    #download_image_from_article_list([base_article], 'img.db', 'base_images')
-
-    #TODO:Compare image, fix similitude alghoritm
-    '''
-    import sqlite3
-    from ImageCompare import compare
-    db = sqlite3.connect('.imagecache/img.db')
-    base_images = db.execute('select * from base_images').fetchall()
-    context_images = db.execute('select * from context_images').fetchall()
-    #create a similitude table
-    db.execute("create table similitude_table (id integer primary key autoincrement, img_base_id integer, simil real, img_context_id integer);")
-    print('Calculating the similitude.....')
-    for b in base_images:
-        for c in context_images:
-            #compute similitude
-            try:
-                sim_value = compare(b[2], c[2])
-                db.execute('insert into similitude_table values (NULL,' + str(b[0]) + ',' + str(sim_value) + ',' + str(c[0]) + ');')
-            except:
-                print('Error in :' + str(b[2]) + "," + str(c[2]))
-    db.commit()
-    db.close()
-    '''
 
 if __name__ == '__main__':
     main()
