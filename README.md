@@ -7,7 +7,6 @@
 ### Group members
 
 - Brunetta Carlo 
-- Di Bonito Jacopo
 - Vinci Andrea F.
 
 ---
