@@ -18,32 +18,18 @@ for j=1:correlated_images_n
 
 img_base_path = base_images(i).local_path;
 img_correlated_path = correlated_images(j).local_path;
-img_base = imread(img_base_path);
-img_corr = imread(img_correlated_path);
 try
-I1 = rgb2gray(img_base);
-I2 = rgb2gray(img_corr);
-catch err
-disp('error for converting image in gray, possibly image are already in gray scale')
-end %end try/catch
-
-points1 = detectHarrisFeatures(I1);
-points2 = detectHarrisFeatures(I2);
-
-[features1, valid_points1] = extractFeatures(I1, points1);
-[features2, valid_points2] = extractFeatures(I2, points2);
-
-indexPairs = matchFeatures(features1, features2);
-val = size(indexPairs);
-  val = val(1);
-if val > 1
-disp('base image url')
-disp(base_images(i).url);
-disp('correlated image url')
-disp(correlated_images(j).url);
-disp(val);
-disp(size(indexPairs))
+img_base = imread(strcat('/Users/darka/Dev/DataHiding/Code/',img_base_path));
+img_corr = imread(strcat('/Users/darka/Dev/DataHiding/Code/',img_correlated_path));
+img_base_gray = rgb2gray(img_base);
+img_corr_gray = rgb2gray(img_corr);
+%algorithms
+H = HarrisAlg(img_base_gray, img_corr_gray);
+S = SURF(img_base_gray, img_corr_gray);
+C = Correlation(img_base_gray, img_corr_gray);
+disp([H,S,C]);
+catch
+    disp('error in imread or in algorithms');
 end
-
 end
 end

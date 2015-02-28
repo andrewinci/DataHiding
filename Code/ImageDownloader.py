@@ -1,8 +1,8 @@
 import sqlite3
 import os
 import sys
-
-
+from PIL import Image
+#TODO:use the best MIN_IMAGE_SIZE
 #minimum size of an image
 MIN_IMAGE = 20000
 
@@ -34,9 +34,17 @@ def download_data(data_link, path):
         print('error for download: '+str(data_link))
         return None
     #return the image name
-    return [path + img_name, img_size]
+    #TODO:get the image's width and height
+    img_width = 0
+    img_height = 0
+    return {
+        'local_path': path+img_name,
+        'url' : data_link,
+        'size': img_size,
+        'width': img_width,
+        'height': img_height}
 
-
+'''
 def download_image_from_article_list(article_list, db_name, table_name):
     #check if db already exist
     # #create db
@@ -54,3 +62,4 @@ def download_image_from_article_list(article_list, db_name, table_name):
                 db.execute("insert into " + table_name + " values (NULL,\'"+str(img_link)+'\',\''+str(img_path)+'\',\''+ str(article_link)+'\');')
     db.commit()
     db.close()
+'''
