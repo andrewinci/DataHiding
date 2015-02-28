@@ -1,4 +1,4 @@
-%import from database 
+%import from database
 addpath ~/Dev/matlab-sqlite3-driver/
 sqlite3.open('/Users/darka/Dev/DataHiding/Code/cache/articles.db');
 corr = sqlite3.execute('select * from comparated_image;');
@@ -20,6 +20,8 @@ H = HarrisAlg(img_base_gray, img_corr_gray);
 S = SURF(img_base_gray, img_corr_gray);
 C = Correlation(img_base_gray, img_corr_gray);
 disp([H,S,C]);
+%save to database
+sqlite3.execute('update comparated_image set Harris = ?, SURF = ?, correlation = ?, is_similar = 2 where img_base_id =? and img_corr_id =?;', H, S, C, id_base, id_corr );
 catch
     disp('error in imread or in algorithms');
 end
