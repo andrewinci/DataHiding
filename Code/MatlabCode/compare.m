@@ -16,9 +16,13 @@ img_corr = imread(strcat('/Users/darka/Dev/DataHiding/Code/',img_correlated_path
 img_base_gray = rgb2gray(img_base);
 img_corr_gray = rgb2gray(img_corr);
 %algorithms
-H = HarrisAlg(img_base_gray, img_corr_gray);
+%H = HarrisAlg(img_base_gray, img_corr_gray);
+H = 0;
 S = SURF(img_base_gray, img_corr_gray);
 C = Correlation(img_base_gray, img_corr_gray);
+clc;
+%disp(['processed' i ' relation over' corr_size])
+disp(sprintf('processed %d reation over %d',i,corr_size))
 disp([H,S,C]);
 %save to database
 sqlite3.execute('update comparated_image set Harris = ?, SURF = ?, correlation = ?, is_similar = 2 where img_base_id =? and img_corr_id =?;', H, S, C, id_base, id_corr );
