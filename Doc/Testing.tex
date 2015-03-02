@@ -192,6 +192,7 @@
 
 \DeclareMathOperator{\mtdt}{metadata} 
 \DeclareMathOperator{\distn}{dNews}
+\DeclareMathOperator{\disti}{dImg}
 
 
 
@@ -520,20 +521,23 @@ We define a function $\mtdt : \mathcal{N} \rightarrow \mathcal{M} \times \mathca
  	\item \textbf{Date}
  	\item Tags of the news \label{tags1}
 \end{itemize} 
-and $\xi_N$ will just be the list of the images contained in $N$.
+and $\xi_N$ will just be the set of the images contained in $N$.\\[0,1cm]
 
 The ``tags''-metadata is critical. We want to obtain some keywords that can describe the contest of the news. We assume that from these keywords we can understand the sector of the news.\\
 The usage of the tags is critical for the discrimination of $N$.
 
-We can see the ``title'' as a real precise metadata that will always descrive the same event. The ``tags'' will create noise in the possible event description so if we analyze it we can optain really temporal-different news but with the same semantic meaning.\\[0,3cm]
+We can see the ``title'' as a real precise metadata that will always descrive the same event. The ``tags'' will create \emph{noise} in the possible event description so if we analyze it we can optain really temporal-different news but with the same semantic meaning.\\[0,3cm]
 
-We define the set $G_N$ as the set of news that has a similar title. In the same way, $G_N^\prime$ will be the set of news with similar tag.\\
-If we define $\mathcal{G}_N := G_N \cap G_N^\prime$ we obtain the set of all the news that has some correlation in the title \textbf{and} in the description. In this way we have empirically done a characterization of the news and extracted just the news that have a high correlation in the metadata.\\
+We define the set $G_N$ as the set of news that has a similar title with respect to a given threshold $\tau_1$.\\
+Then we define $G_N^\prime$ as the set of news with similar tag with respect to the threshold $\tau_1$.\\
+We now define $\mathcal{G}_N := \{ f(G_N,G_N^\prime) \} \subseteq \mathcal{N}$ as a subset of all the news that has some correlation in the title \textbf{and} in the description.\\
+In this way we have empirically done a characterization of the news and extracted just the news that have a high correlation in the metadata.\\[0,2cm]
 
-So if we consider $N$ and $\mathcal{G}_N$ we can define, for every $M \in \mathcal{G}_N$, the distance $\distn_N(M)$ that measure ``the metadata distance'' of $M$ with respect to $N$.\\
-In the same way, we can use a measure over the set of images for searching for similar images.\\[0.2cm]
+We now define for every $N \in \mathcal{N}$ and for every $M \in \mathcal{M}$  the distance $\distn_N(M)$ that measure ``the metadata distance'' of $M$ with respect to $N$.\\
+In the same way, we define a measure $\disti_N(M)$ that measure the ``image distance'' between the images of two news.\\[0.3cm]
 
-From a given news $N$, we do:
+
+So, from a given news $N$, we do:
 
 \begin{enumerate}
 	\item $\mtdt(N) = (\mu_N,\xi_N)$
@@ -542,60 +546,151 @@ From a given news $N$, we do:
 	\item Search, with a given threshold $\tau_2$, all the image-close news $J \subset \mathcal{G}_N$
 \end{enumerate}
 
+\-\\[0,1cm]
+
 At this point we can introduce some empiric ideas:
 
 \begin{center}
-\emph{If a news $M \in H$ has $\xi_M \cap J \neq \emptyset$ then the image of $N$ is likely to be coherent with the metadata.}
+\emph{If a news $M \in H$ and $\exists O \in J$ such that $\xi_M \cap \xi_O \neq \emptyset$ then an image of $N$ is likely to be coherent with the metadata.}
 \end{center}
 
-If a news is metadata-close to $N$ and has some images $I$ image-close, so ww have that the images are coherent with good probability.\\[0.1cm]
+If a news is metadata-close to $N$ and has some images $\xi$ that is image-close, then we have $\xi$ as a particular image that is likely to be coherent with the news.\\[0.2cm]
 
 \begin{center}
-\emph{If a news $M \in J$ has $\distn_N(M) < \tau_1$ then is really likely that the image is not correlated with the news \textbf{or} is a new image.}
+\emph{If a news $M \in J$ has $\distn_N(M) < \tau_1$ then is likely that the image is not correlated with the news.}
 \end{center}
 
-A image-close news but with not near metadata-distance assure that $N$ is probably incoherent.\\[0.1cm]
+A image-close news but with not near metadata-distance assure that $N$ is probably incoherent.\\[0.2cm]
 
 \begin{center}
 \emph{If a news $M \in J \cap H$ but the ``date''-metadata is not close, then one of the two news has a incoherent use of image-news.} \label{terzocaso}
 \end{center}
 
-A news near in metadata and image distances but with different date will imply that there's a incoherence in one of the two news.\\[0.1cm]
+A news near in metadata and image distances but with different date will imply that there's a incoherence in one of the two news.\\[0.2cm]
 
 
-With these empiric rules, we can create a distinguisher that in some cases can distinguish if the image are coherent with the news.\\[0.1cm]
+With these empiric rules, we can create a distinguisher to distinguish if a news image is coherent with the news metadata.\\[0.1cm]
 
-We increase the distinguisher capacity by applying the empiric rules in a really bigger set. For example, if we have two news from the third rule, we can check the two news to see which of the three is the real incoherent news.\\
-Notice that we don't assume if the news are real or not.
+In this mathematical description, we work with sets of \emph{``all the possible $x$''}.\\
+In our implementation we increase the distinguisher capacity by applying the empiric rules in a really bigger set. For example, if we have two news from the third rule, we can check the two news to see which of the three is the real incoherent news.\\
+Notice that we don't assume if the news are real or not but just want to control the coherence of a single news.
 
 
 
 \section{Implementation}
 
-Because is really hard to retrive the set $\mathcal{G}$ of all the news, we use Google as the search motor to retrive all the set of our scheme.\\
-In the same way is impossible to achieve the sets $G_N$ and $G_N^\prime$ because of their size so we will restrict the search in a smaller set of result. The conseguence is that we will operate with a different $\overline{\mathcal{G}}_N$ that will just be the \emph{Top 10} of $G_N$ and the \emph{Top 20} of $G^\prime_N$.\\[0.1cm]
+Because is really hard to retrive the set $\mathcal{G}$, we assume and use Google as the search motor to retrive all the set of our scheme.\\
+In the same way is impossible to achieve the sets $G_N$ and $G_N^\prime$ because of their size so we will restrict the search in a smaller set of result. The conseguence is that we will operate with a different $\overline{\mathcal{G}}_N$ that will just be the \emph{Top 10} of $G_N$ and the \emph{Top 10} of $G^\prime_N$.\\[0.2cm]
 
-In this context we developed the algorithm using Python and different module that can be found on github:
-
+To implement our schema, we used Python 3.4 and Matlab.\\
+The workflow is divided in this step:
 \begin{itemize}
-	\item newspaper : extract the information from a link if they are news
-	\item googleSearcher : scrapper for search on google
-	\item nltk : used as a tagger
+  \item \textbf{Downloading Phase} : from a news link we download all the correlated news via the title and the tags. All these (metadata,image) are inserted into a database.
+  \item \textbf{Similar Analysis} : we concentrate on the image and using similarity algorithms, we filla table in the database.
+  \item \textbf{Check Data} : we can procede in two way:
+  \begin{itemize}
+    \item \textbf{Human-like} : we check if the images are similar using a simple interface
+    \item \textbf{Threshold-like} : we automatize the analisis by valuating the values of the parameter we have with a given threshold
+  \end{itemize}
 \end{itemize}
 
 
-\emph{distance over tag? distance over images?}
+\subsection{Downloading Phase}
+
+From a link to a news, using Python and module that can be found on github, we extrapolate all the metadata of the original news and the correlated ones.\\[0,2cm]
+
+We divided the work in three main modules:
+\begin{itemize}
+  \item \textbf{NewsParser} : using \emph{newspaper}\footnote{link} we parse the original news and get all the metadata except for the \emph{tags}-metadata. These tags are created by a simple \emph{tagger} we create using \emph{ntlk}.\\
+  \textbf{Input : } url of a news\\
+  \textbf{Output : } json with all the metadata
+  \item \textbf{GoogleSearcher} : using \emph{GoogleScrapper}\footnote{link} we search on Google a choosen string.
+  \textbf{Input : } string to search\\
+  \textbf{Output : } list of the first result
+  \item \textbf{DBManager : } using \emph{sqlite3} we create the database with all the metadata and images of the news.\\
+  \textbf{Input : } newses jsons\\
+  \textbf{Output : } database with all the information 
+\end{itemize}
+
+These three module have this workflow:
+
+\begin{enumerate}
+  \item From the original link, we apply NewsParser and obtain the complete description with (metadata,images)
+  \item We search owith GoogleSearcher using as string the \emph{title}-metadata and \emph{tags}-metadata.
+  \item All the result are parsed with NewsParser
+  \item All the information are saved with DBManager into a database
+\end{enumerate}
+
+
+\subsection{Similar Analysis}
+
+Using MATLAB, we measure the similarity using \emph{SURF} and the \emph{correlation}.\\
+We calculate all the value between a single image of the original news with all the images founded by the reserch.\\[0,1cm]
+All these value are saved in the database.
+
+\subsection{Check Data}
+
+\subsubsection{Human-like}
+
+We create, using XCode, an interface where all the similarity are shown one after the other.\\
+The user is asked to answer \emph{``are the two images correlated?''}.\\[0,1cm]
+In this way, from the database, we can check all the similar image and obtain:
+\begin{itemize}
+  \item Threshold for that particular image
+  \item \emph{Data}-metadata analisys for discriminating over the time
+\end{itemize}
+
+With these operation, if we are lucky enough to have some similarity in the researched images, we can answer \emph{``is the original image coherent with the news?''} or \emph{``is there some strange behaviour of the image?''}
+
+\subsubsection{Threshold-like}
+
+From the database, we can automatically check the value of \emph{SURF} and \emph{corelation} and, given a function $f(\tau_{\text{SURF}} , \tau_{\text{cor}})$, filter the similar images.\\
+From these we can analyse the \emph{data}-metadata and see if there is a strange behaviour.\\
+With a high value of threshold, we suppose that we can answer to \emph{``is the original image coherent with the news?''} .
+
 
 \section{Testing}
 
-We selected some news for testing porpouse : 
+We operate with three type of test:
 
-\begin{itemize}
-	\item \url{www.google.it} 
-	\item \url{www.google.com}
-\end{itemize}
+\begin{enumerate}
+  \item \textbf{Human-like only} : statistically analyse \emph{how} we can choose the threshold given by the function $f(\tau_{\text{SURF}} , \tau_{\text{cor}})$.
+  \item \textbf{Threshold-like only} : analyse the behaviour of the coherence-analyser trying different threshold functions.
+  \item \textbf{Human-Threshold check} : we operate with the same news with all the two test and trace conclusion on the efficency of the scheme.
+\end{enumerate}
+
+\subsection{Human-like only}
+
+Considerated the consisted number of similarity to manually check ($\sim 2000$ order), we tested the scheme in a Human-like Check Data, with three news:
+
+\begin{enumerate}
+  \item link1
+  \item link2
+  \item link3
+\end{enumerate}
 
 
+\subsection{Threshold-like only}
+
+
+From the statistic obtained by the previous test, we choose as the similarity function
+\[ f(\tau_{\text{SURF}} , \tau_{\text{cor}}) = \xi * \xi^{-1} \]
+
+With these schema, we analysed $n$ news :
+\begin{enumerate}
+  \item link1
+  \item $\cdots$
+  \item link$n$
+\end{enumerate}
+
+\subsection{Human-Threshold check}
+
+Using the previous result, we double-controlled with the two methods:
+
+\begin{enumerate}
+  \item link1
+  \item link2
+\end{enumerate}
 
 
 
