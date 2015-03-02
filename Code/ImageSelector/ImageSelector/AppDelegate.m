@@ -14,27 +14,24 @@
 @end
 
 @implementation AppDelegate
-@synthesize linkList;
-@synthesize linkIndex;
-@synthesize allowedLink;
-@synthesize denyLink;
-@synthesize db;
 
+@synthesize DataManager;
+@synthesize index;
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+-(NSString*)select_db{
     NSString *db_filename = @"provadb.db";
     // Create the File Open Dialog class.
     NSOpenPanel* openDlg = [NSOpenPanel openPanel];
-
+    
     // Enable the selection of files in the dialog.
     [openDlg setCanChooseFiles:YES];
-
+    
     // Multiple files not allowed
     [openDlg setAllowsMultipleSelection:NO];
-
+    
     // Can't select a directory
     [openDlg setCanChooseDirectories:NO];
-
+    
     [openDlg setTitle:@"Choose your db"];
     // Display the dialog. If the OK button was pressed,
     // process the files.
@@ -43,91 +40,63 @@
         // Get an array containing the full filenames of all
         // files and directories selected.
         NSArray* files = [openDlg filenames];
-
+        
         db_filename = [files objectAtIndex:0];
+        
+    }
+    return db_filename;
+}
 
-    }
-    if (sqlite3_open([db_filename UTF8String], &db)!= SQLITE_OK)
-    {
-        sqlite3_close(db);
-        NSLog(@"Database failed to open");
-    }
-    else{
-        //initialize array
-        linkList = [[NSMutableArray alloc] init];
-        //read all link from table
-        NSString *tableName = @"comparated_image";
-        NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@", tableName];
-        sqlite3_stmt * statement;
-        if(sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK)
-        {
-            while(sqlite3_step(statement) == SQLITE_ROW)
-            {
-                char *field3 = (char *) sqlite3_column_text(statement, 3);
-                NSString *link = [[NSString alloc] initWithUTF8String:field3];
-                field3 = (char *) sqlite3_column_text(statement, 2);
-                NSString *localPath = [[NSString alloc] initWithUTF8String:field3];
-                field3 = (char *) sqlite3_column_text(statement, 5);
-                NSString *allowed = [[NSString alloc] initWithUTF8String:field3];
-                [linkList addObject:[[LinkPath alloc] initWithLink:link Path:localPath andAllowed:allowed]];
-            }
-        }
-    }
-
-    linkIndex = 0;
-    allowedLink = [[NSMutableArray alloc] init];
-    denyLink = [[NSMutableArray alloc] init];
+- (void)applicationDidFinishLaunching:(NSNotification *)Notification {
+    //Select Database
+    NSString * db_filename = [self select_db];
+    DataManager = [[DBManager alloc] initWithDatabaseName:db_filename];
+    index = 0;
     [self showImage];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-    // Insert code here to tear down your application
-    sqlite3_close(db);
+    [DataManager closeDB];
+}
+
+
+-(void)showImage{
+    //show base image
+    DataModel *el = [DataManager DataList][index];
+    NSString *imgBasepath = [NSString stringWithFormat:@"%@%@",@"/Users/darka/Dev/DataHiding/Code/",el.imageBasePath];
+    NSImage *imageBase = [[NSImage alloc] initByReferencingFile:imgBasepath];
+    [self.ImageBase setImage:imageBase];
+    
+    //show correlated image
+    NSString *imgCorrpath = [NSString stringWithFormat:@"%@%@",@"/Users/darka/Dev/DataHiding/Code/",el.imageCorrPath];
+    NSImage *imageCorr = [[NSImage alloc] initByReferencingFile:imgCorrpath];
+    [self.ImageCorrelated setImage:imageCorr];
+    
+    //show SURF value
+    [self.SURFvalue setStringValue: [NSString stringWithFormat:@"%f", el.SURF]];
+    
 }
 
 - (IBAction)AllowPressed:(id)sender {
-    [allowedLink addObject:linkList[linkIndex]];
-    NSString *queryString =[NSString stringWithFormat:@"update image set allowed = 'Y' where url ='%@' ",[linkList[linkIndex] Link]];
-    const char *query = [queryString UTF8String];
-    sqlite3_exec(db,query, NULL, NULL, NULL);
-    linkIndex++;
-    [self showImage];
-}
-
-- (IBAction)DenyPressed:(id)sender {
-    [denyLink addObject:linkList[linkIndex]];
-    NSString *queryString =[NSString stringWithFormat:@"update image set allowed = 'N' where url ='%@' ",[linkList[linkIndex] Link]];
-    const char *query = [queryString UTF8String];
-    sqlite3_exec(db,query, NULL, NULL, NULL);
-    linkIndex++;
+    DataModel *el = [DataManager DataList][index];
+    [[self DataManager] setIsSimilar:true whereBasePathIs:el.imageBasePath CorrPathIs:el.imageCorrPath];
+    index++;
     [self showImage];
 }
 
 - (IBAction)SkipPressed:(id)sender {
-    [allowedLink addObject:linkList[linkIndex]];
-    NSString *queryString =[NSString stringWithFormat:@"update image set allowed = '0' where url ='%@' ",[linkList[linkIndex] Link]];
-    const char *query = [queryString UTF8String];
-    sqlite3_exec(db,query, NULL, NULL, NULL);
-    linkIndex++;
-    [self showImage];
+    index++;
 }
 
 - (IBAction)BackPressed:(id)sender {
-    linkIndex--;
+    index--;
     [self showImage];
 }
 
-- (IBAction)AllPressed:(id)sender {
+- (IBAction)DenyPressed:(id)sender {
+    DataModel *el = [DataManager DataList][index];
+    [[self DataManager] setIsSimilar:false whereBasePathIs:el.imageBasePath CorrPathIs:el.imageCorrPath];
+    index++;
+    [self showImage];
 }
-
--(void)showImage{
-    LinkPath *el = linkList[linkIndex];
-    //show first image
-    //NSImage *image = [[NSImage alloc]initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:el.Link]]];
-    NSString *path = [NSString stringWithFormat:@"%@%@",@"/Users/darka/Dev/DataHiding/Code/",el.LocalPath];
-    NSImage *image = [[NSImage alloc] initByReferencingFile:path];
-    [self.ImageViewer setImage:image];
-    [self.LinkLabel setStringValue:el.Link];
-}
-
 @end

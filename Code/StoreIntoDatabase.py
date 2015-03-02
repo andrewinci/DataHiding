@@ -10,14 +10,15 @@ def __initializeDB__(db):
        link text);''')
     db.execute('''create table if not exists article (
        id integer primary key autoincrement,
-       article_id integer,
+       article_base_id integer,
        local_path text,
        title text,
        url text,
        tags text,
        data integer,
        is_base integer,
-       foreign key (article_id) references article_base(id) on update cascade on delete cascade);''')
+       foreign key (article_base_id) references article_base(id) on update cascade on delete cascade);''')
+
     db.execute('''create table if not exists image(
        id integer primary key autoincrement,
        article_id integer,
@@ -29,16 +30,16 @@ def __initializeDB__(db):
        foreign key (article_id) references article(id) on update cascade on delete cascade);''')
 
     db.execute('''create table if not exists comparated_image(
-       img_base_id integer,
-       img_base_path text,
-       img_corr_id integer,
-       img_corr_path text,
-       Harris real,
-       SURF real,
-       correlation real,
-       is_similar integer,
-       foreign key (img_base_id) references image(id) on update cascade on delete cascade,
-       foreign key (img_corr_id) references image(id) on update cascade on delete cascade);''')
+        article_base_id integer,
+        img_base_id integer,
+        img_base_path text,
+        img_corr_id integer,
+        img_corr_path text,
+        SURF real,
+        correlation real,
+        is_similar integer,
+        foreign key (img_base_id) references image(id) on update cascade on delete cascade,
+        foreign key (img_corr_id) references image(id) on update cascade on delete cascade);''')
 
 
 def __save_images_from_article(ar):
@@ -183,7 +184,7 @@ def store_articles(article_base, context_articles):
         #get article id
         article_id = article_db.execute('select id from article order by id desc limit 1;').fetchone()[0]
         #get the images
-        result = __save_images_from_article(article_base)
+        result = __save_images_from_article(ar)
         #store into db
         for img in result:
             article_db.execute('insert into image values(NULL,?,?,?,?,?,?);',
@@ -193,17 +194,5 @@ def store_articles(article_base, context_articles):
                                 img['size'],
                                 img['width'],
                                 img['height']])
-        #get correlated images id
-        images_base = article_db.execute('select id, local_path from image where article_id in '
-                                         '(select id from article where article_id = ? and is_base = 0);',
-                                         [article_base_id]).fetchall()
-        images_corr = article_db.execute('select id, local_path from image where article_id in '
-                                         '(select id from article where article_id = ? and is_base = 1);',
-                                         [article_base_id]).fetchall()
-        for i1 in images_base:
-            for i2 in images_corr:
-                article_db.execute('insert into comparated_image values(?,?,?,?,0,0,0,0);',
-                                   [i1[0], i1[1], i2[0], i2[1]])
-    #get article base image list
     article_db.commit()
     article_db.close()

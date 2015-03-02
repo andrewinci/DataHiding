@@ -8,24 +8,27 @@
 
 #import <Cocoa/Cocoa.h>
 #import <sqlite3.h>
-#import "LinkPath.h"
+#import "DBManager.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
-@property (weak) IBOutlet NSTextField *LinkLabel;
-@property (weak) IBOutlet NSImageView *ImageViewer;
+//controller
+@property (strong)DBManager* DataManager;
+@property int index;
+-(void)showImage;
+
+//view
+@property (weak) IBOutlet NSTextField *LabelImageBase;
+@property (weak) IBOutlet NSImageView *ImageBase;
+@property (weak) IBOutlet NSTextField *LabelImageCorrelated;
+@property (weak) IBOutlet NSImageView *ImageCorrelated;
+@property (weak) IBOutlet NSTextField *SURFvalue;
 
 - (IBAction)AllowPressed:(id)sender;
-- (IBAction)DenyPressed:(id)sender;
 - (IBAction)SkipPressed:(id)sender;
 - (IBAction)BackPressed:(id)sender;
-- (IBAction)AllPressed:(id)sender;
+- (IBAction)DenyPressed:(id)sender;
 
-@property (strong) NSMutableArray* linkList;
-@property int linkIndex;
-@property (strong) NSMutableArray* allowedLink;
-@property (strong) NSMutableArray* denyLink;
-@property sqlite3 *db;
--(void)showImage;
+
 @end
 

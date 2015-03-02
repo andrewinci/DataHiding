@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		42372C2C1A9C6D5D0047BED5 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42372C2B1A9C6D5D0047BED5 /* libsqlite3.dylib */; };
-		42372C341A9C914E0047BED5 /* LinkPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 42372C331A9C914E0047BED5 /* LinkPath.m */; };
+		42B3D2BA1AA4714D004920B0 /* DataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B3D2B91AA4714D004920B0 /* DataModel.m */; };
+		42B3D2BD1AA4733A004920B0 /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B3D2BC1AA4733A004920B0 /* DBManager.m */; };
 		42CB8E1E1A9C633A0025C170 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CB8E1D1A9C633A0025C170 /* AppDelegate.m */; };
 		42CB8E201A9C633A0025C170 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CB8E1F1A9C633A0025C170 /* main.m */; };
 		42CB8E221A9C633A0025C170 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42CB8E211A9C633A0025C170 /* Images.xcassets */; };
@@ -28,8 +29,10 @@
 
 /* Begin PBXFileReference section */
 		42372C2B1A9C6D5D0047BED5 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		42372C321A9C914E0047BED5 /* LinkPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinkPath.h; sourceTree = "<group>"; };
-		42372C331A9C914E0047BED5 /* LinkPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinkPath.m; sourceTree = "<group>"; };
+		42B3D2B81AA4714D004920B0 /* DataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataModel.h; sourceTree = "<group>"; };
+		42B3D2B91AA4714D004920B0 /* DataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataModel.m; sourceTree = "<group>"; };
+		42B3D2BB1AA4733A004920B0 /* DBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBManager.h; sourceTree = "<group>"; };
+		42B3D2BC1AA4733A004920B0 /* DBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBManager.m; sourceTree = "<group>"; };
 		42CB8E171A9C633A0025C170 /* ImageSelector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageSelector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42CB8E1B1A9C633A0025C170 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42CB8E1C1A9C633A0025C170 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -88,8 +91,10 @@
 				42CB8E211A9C633A0025C170 /* Images.xcassets */,
 				42CB8E231A9C633A0025C170 /* MainMenu.xib */,
 				42CB8E1A1A9C633A0025C170 /* Supporting Files */,
-				42372C321A9C914E0047BED5 /* LinkPath.h */,
-				42372C331A9C914E0047BED5 /* LinkPath.m */,
+				42B3D2BB1AA4733A004920B0 /* DBManager.h */,
+				42B3D2BC1AA4733A004920B0 /* DBManager.m */,
+				42B3D2B81AA4714D004920B0 /* DataModel.h */,
+				42B3D2B91AA4714D004920B0 /* DataModel.m */,
 			);
 			path = ImageSelector;
 			sourceTree = "<group>";
@@ -220,8 +225,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				42CB8E201A9C633A0025C170 /* main.m in Sources */,
-				42372C341A9C914E0047BED5 /* LinkPath.m in Sources */,
+				42B3D2BA1AA4714D004920B0 /* DataModel.m in Sources */,
 				42CB8E1E1A9C633A0025C170 /* AppDelegate.m in Sources */,
+				42B3D2BD1AA4733A004920B0 /* DBManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
