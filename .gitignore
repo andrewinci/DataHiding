@@ -1,6 +1,6 @@
 
 *.pyc
-<<<<<<< Updated upstream
+#<<<<<<< Updated upstream
 
 Doc/Testing.aux
 
@@ -19,5 +19,5 @@ Code/matlab-sqlite3-driver/*
 Code/cache/*
 
 Code/google_scraper.db
-=======
->>>>>>> Stashed changes
+#=======
+#>>>>>>> Stashed changes
