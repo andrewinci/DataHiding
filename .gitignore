@@ -1,6 +1,5 @@
 
 *.pyc
-#<<<<<<< Updated upstream
 
 Doc/Testing.aux
 
@@ -14,10 +13,6 @@ Doc/Testing.synctex.gz
 
 Doc/Testing.pdf
 
-Code/matlab-sqlite3-driver/*
+Code/google_scraper.db
 
 Code/cache/*
-
-Code/google_scraper.db
-#=======
-#>>>>>>> Stashed changes
