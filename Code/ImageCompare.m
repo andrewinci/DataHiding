@@ -6,6 +6,12 @@ addpath(sqlitedriver)
 
 %load database
 dbfile = strcat(currentFolder,'/cache/articles.db');
+
+% NB
+% Compiling ALL the sqlite3 because, if not, it won't work :|
+% You know... compiling external library...
+% sqlite3.make('all');
+
 sqlite3.open(dbfile);
 imgs_base_from_sql = sqlite3.execute('select * from image where article_id in (select id from article where is_base = 1);');
 imgs_corr_from_sql = sqlite3.execute('select * from image where article_id in (select id from article where is_base = 0);');
