@@ -5,7 +5,8 @@ sqlitedriver = strcat(currentFolder,'/matlab-sqlite3-driver/');
 addpath(sqlitedriver)
 
 %load database
-sqlite3.open('cache/articles.db');
+dbfile = strcat(currentFolder,'/cache/articles.db');
+sqlite3.open(dbfile);
 imgs_base_from_sql = sqlite3.execute('select * from image where article_id in (select id from article where is_base = 1);');
 imgs_corr_from_sql = sqlite3.execute('select * from image where article_id in (select id from article where is_base = 0);');
 
