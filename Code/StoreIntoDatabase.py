@@ -1,8 +1,9 @@
 import os
 import sqlite3
 import sys
-from Tagger import tag
 
+from Tagger import tag
+from Config import MIN_IMAGE_SIZE
 
 def __initializeDB__(db):
     db.execute('''create table if not exists article_base (
@@ -42,7 +43,7 @@ def __initializeDB__(db):
         foreign key (img_corr_id) references image(id) on update cascade on delete cascade);''')
 
 
-def __save_images_from_article(ar):
+def __save_images_from_article__(ar):
     # download image
     image_list = []
     for img_url in ar.images:
@@ -50,16 +51,6 @@ def __save_images_from_article(ar):
         if not img_down_result is None:
             image_list.append(img_down_result)
     return image_list
-
-# TODO:set a good lower bound for the image size
-MIN_IMAGE = 20000
-'''
-    'local_path'
-    'url'
-    'size'
-    'width'
-    'height'
-    '''
 
 
 def __download_image__(data_link, path):
@@ -77,7 +68,7 @@ def __download_image__(data_link, path):
         #get image size
         img_size = sys.getsizeof(img_data)
         #check the size of an image
-        if img_size > MIN_IMAGE:
+        if img_size > MIN_IMAGE_SIZE:
             #get the name
             img_name = str(xxhash.xxh64(img_data).hexdigest())
             f = open(path + img_name, 'wb')
@@ -99,15 +90,6 @@ def __download_image__(data_link, path):
         'size': img_size,
         'width': img_width,
         'height': img_height}
-
-
-'''
-    'local_path'
-    'title'
-    'url'
-    'tags'
-    'data'
-    '''
 
 
 def __save_article__(ar):
@@ -159,7 +141,7 @@ def store_articles(article_base, context_articles):
                         result['data'],
                         '1'])
     #get the images
-    images_base = __save_images_from_article(article_base)
+    images_base = __save_images_from_article__(article_base)
     #store into db
     for img in images_base:
         article_db.execute('insert into image values(NULL,?,?,?,?,?,?);',
@@ -184,7 +166,7 @@ def store_articles(article_base, context_articles):
         #get article id
         article_id = article_db.execute('select id from article order by id desc limit 1;').fetchone()[0]
         #get the images
-        result = __save_images_from_article(ar)
+        result = __save_images_from_article__(ar)
         #store into db
         for img in result:
             article_db.execute('insert into image values(NULL,?,?,?,?,?,?);',

@@ -1,3 +1,4 @@
+clc;
 %add sqlite driver
 addpath ~/Dev/matlab-sqlite3-driver/
 %load database
@@ -39,7 +40,12 @@ end
 %now all the images and the features are in the imgs_corr list
 
 disp('Comparing images');
-cont=0;
+cont=1;
+Nbase = size(imgs_base);
+Nbase = Nbase(2);
+Ncorr = size(imgs_corr);
+Ncorr = Ncorr(2);
+numComp =  Ncorr * Nbase;
 %compare images
 for imgbase=imgs_base
 for imgcorr=imgs_corr
@@ -57,8 +63,11 @@ img2 = imresize(img2,size(img1));
 C = corr2(img1, img2);
 
 clc;
-disp(cont);
+fprintf('%d of %d', cont, numComp);
 sqlite3.execute('insert into comparated_image values(1,?,?,?,?,?,?,?)',imgbase.sql_result.id,imgbase.sql_result.local_path,imgcorr.sql_result.id,imgcorr.sql_result.local_path,S,C,2);
 cont= cont +1;
 end
 end
+clc;
+clear;
+exit
