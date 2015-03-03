@@ -1,8 +1,11 @@
 clc;
+currentFolder = pwd;
 %add sqlite driver
-addpath ~/Dev/matlab-sqlite3-driver/
+sqlitedriver = strcat(currentFolder,'/matlab-sqlite3-driver/');
+addpath(sqlitedriver)
+
 %load database
-sqlite3.open('/Users/darka/Dev/DataHiding/Code/cache/articles.db');
+sqlite3.open('cache/articles.db');
 imgs_base_from_sql = sqlite3.execute('select * from image where article_id in (select id from article where is_base = 1);');
 imgs_corr_from_sql = sqlite3.execute('select * from image where article_id in (select id from article where is_base = 0);');
 
@@ -11,7 +14,7 @@ disp('load images base');
 cont = 1;
 for img=imgs_base_from_sql
 
-tempimage = imread(strcat('/Users/darka/Dev/DataHiding/Code/',img.local_path));
+tempimage = imread(img.local_path);
 tempimagegray = rgb2gray(tempimage);
 points1 = detectSURFFeatures(tempimagegray);
 [f1, vpts1] = extractFeatures(tempimagegray, points1);
@@ -20,6 +23,7 @@ imgs_base(cont) = struct('sql_result',img,'features',f1,'image',tempimagegray);
 cont = cont +1;
 end
 
+
 %now all the images and the features are in the imgs_base list
 
 %load correlated images
@@ -27,7 +31,7 @@ disp('load correlated images');
 cont = 1;
 for img=imgs_corr_from_sql
 
-tempimage = imread(strcat('/Users/darka/Dev/DataHiding/Code/',img.local_path));
+tempimage = imread(img.local_path);
 tempimagegray = rgb2gray(tempimage);
 points1 = detectSURFFeatures(tempimagegray);
 [f1, vpts1] = extractFeatures(tempimagegray, points1);
@@ -40,12 +44,15 @@ end
 %now all the images and the features are in the imgs_corr list
 
 disp('Comparing images');
+
 cont=1;
+%calculate the number of total confront
 Nbase = size(imgs_base);
 Nbase = Nbase(2);
 Ncorr = size(imgs_corr);
 Ncorr = Ncorr(2);
 numComp =  Ncorr * Nbase;
+
 %compare images
 for imgbase=imgs_base
 for imgcorr=imgs_corr
