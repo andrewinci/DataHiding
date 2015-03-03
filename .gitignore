@@ -13,5 +13,11 @@ Doc/Testing.out
 Doc/Testing.synctex.gz
 
 Doc/Testing.pdf
+
+Code/matlab-sqlite3-driver/*
+
+Code/cache/*
+
+Code/google_scraper.db
 =======
 >>>>>>> Stashed changes
