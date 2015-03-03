@@ -14,7 +14,7 @@ disp('load images base');
 %load images base
 cont = 1;
 for img=imgs_base_from_sql
-
+try
 tempimage = imread(img.local_path);
 tempimagegray = rgb2gray(tempimage);
 points1 = detectSURFFeatures(tempimagegray);
@@ -22,6 +22,9 @@ points1 = detectSURFFeatures(tempimagegray);
 
 imgs_base(cont) = struct('sql_result',img,'features',f1,'image',tempimagegray);
 cont = cont +1;
+catch
+
+    end
 end
 
 
@@ -31,7 +34,7 @@ end
 disp('load correlated images');
 cont = 1;
 for img=imgs_corr_from_sql
-
+try
 tempimage = imread(img.local_path);
 tempimagegray = rgb2gray(tempimage);
 points1 = detectSURFFeatures(tempimagegray);
@@ -39,6 +42,8 @@ points1 = detectSURFFeatures(tempimagegray);
 
 imgs_corr(cont) = struct('sql_result',img,'features',f1, 'image', tempimagegray);
 cont = cont +1;
+catch
+    end
 end
 
 
