@@ -15,7 +15,9 @@
 //controller
 @property (strong)DBManager* DataManager;
 @property int index;
+@property (strong)NSString* mainPath;
 -(void)showImage;
+
 
 //view
 @property (weak) IBOutlet NSTextField *LabelImageBase;

@@ -21,6 +21,8 @@
  is_similar integer,
  */
 -(id) initWithBasePath:(NSString*)imgBasePath CorrPath:(NSString*)imgCorrPath SURFValue:(float) surfValue;
+
+
 @property (strong) NSString* imageBasePath;
 @property (strong) NSString* imageBaseLink;
 
