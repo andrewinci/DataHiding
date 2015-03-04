@@ -1,13 +1,13 @@
-
 import os
 from newspaper import Article
 
-#used for find tag in a text
-from Tagger import tag
+
 #used for search on google
-from Searcher import searchongoogle
+from DHLib.Searcher import searchongoogle
+#used for find tag in a text
+from DHLib.TextMining import tag
 #used for select which article are in context
-from TextCompare import correlated_article
+from DHLib.TextMining import correlated_article
 #import constant
 from Config import N_TAG, N_TITLE, C_N_TAG
 from Config import ARTICLE_URL as article_base_url
