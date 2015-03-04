@@ -18,7 +18,7 @@
 %% Legal Notice:
 %% This code is offered as-is without any warranty either expressed or
 %% implied; without even the implied warranty of MERCHANTABILITY or
-%% FITNESS FOR A PARTICULAR PURPOSE!
+%% FITNESS FOR A PARTICULAR PURPOSE! 
 %% User assumes all risk.
 %% In no event shall IEEE or any contributor to this code be liable for
 %% any damages or losses, including, but not limited to, incidental,
@@ -147,7 +147,7 @@
 % graphicx was written by David Carlisle and Sebastian Rahtz. It is
 % required if you want graphics, photos, etc. graphicx.sty is already
 % installed on most LaTeX systems. The latest version and documentation
-% can be obtained at:
+% can be obtained at: 
 % http://www.ctan.org/tex-archive/macros/latex/required/graphics/
 % Another good source of documentation is "Using Imported Graphics in
 % LaTeX2e" by Keith Reckdahl which can be found at:
@@ -170,8 +170,8 @@
 
 % *** MATH PACKAGES ***
 %
-\usepackage{amsmath}
-\usepackage{amsopn}
+\usepackage{amsmath} 
+\usepackage{amsopn} 
 % \usepackage[cmex10]{amsmath}
 % A popular package from the American Mathematical Society that provides
 % many useful and powerful commands for dealing with mathematics. If using
@@ -190,7 +190,7 @@
 % http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
 
 
-\DeclareMathOperator{\mtdt}{metadata}
+\DeclareMathOperator{\mtdt}{metadata} 
 \DeclareMathOperator{\distn}{dNews}
 \DeclareMathOperator{\disti}{dImg}
 
@@ -312,8 +312,8 @@
 % \let\MYoriglatexcaption\caption
 % \renewcommand{\caption}[2][\relax]{\MYoriglatexcaption[#2]{#2}}
 %\fi
-% endfloat.sty was written by James Darrell McCauley, Jeff Goldberg and
-% Axel Sommerfeldt. This package may be useful when used in conjunction with
+% endfloat.sty was written by James Darrell McCauley, Jeff Goldberg and 
+% Axel Sommerfeldt. This package may be useful when used in conjunction with 
 % IEEEtran.cls'  captionsoff option. Some IEEE journals/societies require that
 % submissions have lists of figures/tables at the end of the paper and that
 % figures/tables without any captions are placed on a page by themselves at
@@ -342,7 +342,7 @@
 % http://www.ctan.org/tex-archive/macros/latex/contrib/endfloat/
 %
 % The IEEEtran \ifCLASSOPTIONcaptionsoff conditional can also be used
-% later in the document, say, to conditionally put the References on a
+% later in the document, say, to conditionally put the References on a 
 % page by themselves.
 
 
@@ -399,10 +399,10 @@
 % \thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
 % \thanks{Manuscript received April 19, 2005; revised September 17, 2014.}}
 
-% note the % following the last \IEEEmembership and also \thanks -
+% note the % following the last \IEEEmembership and also \thanks - 
 % these prevent an unwanted space from occurring between the last author name
 % and the end of the author line. i.e., if you had this:
-%
+% 
 % \author{....lastname \thanks{...} \thanks{...} }
 %                     ^------------^------------^----Do not want these spaces!
 %
@@ -424,7 +424,7 @@
 
 % The only time the second header will appear is for the odd numbered pages
 % after the title page when using the twoside option.
-%
+% 
 % *** Note that you probably will NOT want to include the author's ***
 % *** name in the headers of peer review papers.                   ***
 % You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
@@ -453,7 +453,7 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-With this paper we want to analyze the problem of image discrimination related to a news that can be found on the Internet. Our goal is to create an empirical way to
+With this paper we want to analyze the problem of image discrimination related to a news that can be found on the Internet. Our goal is to create an empirical way to 
 see if the image is related with the news even in a semantic meaning and in a temporal view.
 \end{abstract}
 
@@ -482,17 +482,17 @@ Key, key, key
 \section{Introduction}
 % The very first letter is a 2 line initial drop letter followed
 % by the rest of the first word in caps.
-%
+% 
 % form to use if the first word consists of a single letter:
 % \IEEEPARstart{A}{demo} file is ....
-%
+% 
 % form to use if you need the single drop letter followed by
 % normal text (unknown if ever used by IEEE):
 % \IEEEPARstart{A}{}demo file is ....
-%
+% 
 % Some journals put the first two words in caps:
 % \IEEEPARstart{T}{his demo} file is ....
-%
+% 
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
 \IEEEPARstart{W}{ith} the increasing information that can be found on the Internet, is hard to trace and believe if a news website can be trust.\\
@@ -500,7 +500,7 @@ In this framework is really hard to define if ``an image is related with the new
 So we investigate a way to check if a given news has coerent image with respect to the content of the news without using any authorative database. We will try to define some ``metadata'' that will be used to analyze the correctness of the (news,image) couple.
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-
+ 
 \hfill Month, Day Year
 
 \subsection{Math legend}
@@ -514,13 +514,13 @@ So we investigate a way to check if a given news has coerent image with respect 
 
 
 To analyze the single news $N$ we want to extract some metadata $\mu_N$ that describe and discriminate the news $N$.\\
-We define a function $\mtdt : \mathcal{N} \rightarrow \mathcal{M} \times \mathcal{I}$ that $\mtdt(N) = (\mu_N , \xi_N)$ where $\mu_x$ will contain
+We define a function $\mtdt : \mathcal{N} \rightarrow \mathcal{M} \times \mathcal{I}$ that $\mtdt(N) = (\mu_N , \xi_N)$ where $\mu_x$ will contain 
 \begin{itemize}
  	\item Title of the news
  	\item Body
  	\item \textbf{Date}
  	\item Tags of the news \label{tags1}
-\end{itemize}
+\end{itemize} 
 and $\xi_N$ will just be the set of the images contained in $N$.\\[0,1cm]
 
 The ``tags''-metadata is critical. We want to obtain some keywords that can describe the contest of the news. We assume that from these keywords we can understand the sector of the news.\\
@@ -609,7 +609,7 @@ We divided the work in three main modules:
   \textbf{Output : } list of the first result
   \item \textbf{DBManager : } using \emph{sqlite3} we create the database with all the metadata and images of the news.\\
   \textbf{Input : } newses jsons\\
-  \textbf{Output : } database with all the information
+  \textbf{Output : } database with all the information 
 \end{itemize}
 
 These three module have this workflow:
@@ -664,9 +664,9 @@ We operate with three type of test:
 Considerated the consisted number of similarity to manually check ($\sim 2000$ order), we tested the scheme in a Human-like Check Data, with three news:
 
 \begin{enumerate}
-  \item link1
-  \item http://www.dailymail.co.uk/news/article-2938886/This-say-confronted-actions-ISIS-publishes-guidance-justify-execution-Jordanian-pilot-just-ten-minutes-disturbing-video-emerged-showing-burning-death.html
-  \item link3
+  \item \textbf{BBC} - \emph{Charlie Hebdo attack: Three days of terror} \footnote{\url{http://www.bbc.com/news/world-europe-30708237}}
+  \item \textbf{MailOnline} - \emph{ISIS knew burning Jordanian pilot alive would spark backlash in Islamic world - so prepared a list of justifications beforehand} \footnote{\url{http://www.dailymail.co.uk/news/article-2938886/}}
+  \item \textbf{NBC} - \emph{Turkish Airlines Jet Skids Off Foggy Runway in Kathmandu, Nepal} \footnote{\url{http://www.nbcnews.com/news/world/turkish-airlines-jet-skids-foggy-runway-kathmandu-nepal-n316956}}
 \end{enumerate}
 
 
@@ -715,7 +715,7 @@ Using the previous result, we double-controlled with the two methods:
 %\begin{figure}[!t]
 %\centering
 %\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex,
+% where an .eps filename suffix will be assumed under latex, 
 % and a .pdf suffix will be assumed for pdflatex; or what has been declared
 % via \DeclareGraphicsExtensions.
 %\caption{Simulation results for the network.}
@@ -731,7 +731,7 @@ Using the previous result, we double-controlled with the two methods:
 % The subfigure \label commands are set within each subfloat command,
 % and the \label for the overall figure must come after \caption.
 % \hfil is used as a separator to get equal spacing.
-% Watch out that the combined width of all the subfigures on a
+% Watch out that the combined width of all the subfigures on a 
 % line do not exceed the text width or a line break will occur.
 %
 %\begin{figure*}[!t]
@@ -788,7 +788,7 @@ Using the previous result, we double-controlled with the two methods:
 % in-text middle ("here") positioning is typically not used, but it
 % is allowed and encouraged for Computer Society conferences (but
 % not Computer Society journals). Most IEEE journals/conferences use
-% top floats exclusively.
+% top floats exclusively. 
 % Note that, LaTeX2e, unlike IEEE journals/conferences, places
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
@@ -874,7 +874,7 @@ The conclusion goes here.
 % \end{thebibliography}
 
 % biography section
-%
+% 
 % If you have an EPS/PDF photo (graphicx package needed) extra braces are
 % needed around the contents of the optional argument to biography to prevent
 % the LaTeX parser from getting confused when it sees the complicated
@@ -917,3 +917,5 @@ The conclusion goes here.
 
 % that's all folks
 \end{document}
+
+

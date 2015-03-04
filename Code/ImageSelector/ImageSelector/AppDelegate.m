@@ -17,6 +17,7 @@
 
 @synthesize DataManager;
 @synthesize index;
+@synthesize mainPath;
 
 -(NSString*)select_db{
     NSString *db_filename = @"provadb.db";
@@ -50,6 +51,10 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)Notification {
     //Select Database
     NSString * db_filename = [self select_db];
+    //set main path
+    NSArray *dbNameSeparatedPath = [db_filename componentsSeparatedByString:@"/"];
+    NSUInteger length = [dbNameSeparatedPath count];
+    mainPath = [[dbNameSeparatedPath subarrayWithRange:NSMakeRange(0, length-2)] componentsJoinedByString:@"/"];
     DataManager = [[DBManager alloc] initWithDatabaseName:db_filename];
     index = 0;
     [self showImage];
@@ -63,12 +68,12 @@
 -(void)showImage{
     //show base image
     DataModel *el = [DataManager DataList][index];
-    NSString *imgBasepath = [NSString stringWithFormat:@"%@%@",@"/Users/darka/Dev/DataHiding/Code/",el.imageBasePath];
+    NSString *imgBasepath = [NSString stringWithFormat:@"%@/%@",mainPath,el.imageBasePath];
     NSImage *imageBase = [[NSImage alloc] initByReferencingFile:imgBasepath];
     [self.ImageBase setImage:imageBase];
     
     //show correlated image
-    NSString *imgCorrpath = [NSString stringWithFormat:@"%@%@",@"/Users/darka/Dev/DataHiding/Code/",el.imageCorrPath];
+    NSString *imgCorrpath = [NSString stringWithFormat:@"%@/%@",mainPath,el.imageCorrPath];
     NSImage *imageCorr = [[NSImage alloc] initByReferencingFile:imgCorrpath];
     [self.ImageCorrelated setImage:imageCorr];
     
