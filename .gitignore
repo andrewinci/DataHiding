@@ -18,3 +18,5 @@ Code/google_scraper.db
 Code/matlab-sqlite3-driver/*
 
 Code/cache/*
+
+Code/ImageSelector/*
