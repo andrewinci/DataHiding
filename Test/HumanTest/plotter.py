@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 tot = "select count(*) from comparated_image;"
 sim = "select count(*) from comparated_image where is_similar = 1;"
 
-db = sqlite3.connect("Link2.db")
+db = sqlite3.connect("Link3.db")
 
 
 
