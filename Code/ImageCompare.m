@@ -89,9 +89,9 @@ img1 = imgbase.image;
 img2 = imgcorr.image;
 img2 = imresize(img2,size(img1));
 C = corr2(img1, img2);
-%clc;
+clc;
 fprintf('%d of %d', cont, numComp);
-%sqlite3.execute('insert into comparated_image values(1,?,?,?,?,?,?,?)',imgbase.sql_result.id,imgbase.sql_result.local_path,imgcorr.sql_result.id,imgcorr.sql_result.local_path,S,C,2);
+sqlite3.execute('insert into comparated_image values(1,?,?,?,?,?,?,?)',imgbase.sql_result.id,imgbase.sql_result.local_path,imgcorr.sql_result.id,imgcorr.sql_result.local_path,S,C,2);
 cont= cont +1;
 end
 end
