@@ -1,13 +1,12 @@
 import os
 from newspaper import Article
-
-
 #used for search on google
 from DHLib.Searcher import searchongoogle
 #used for find tag in a text
 from DHLib.TextMining import tag
 #used for select which article are in context
 from DHLib.TextMining import correlated_article
+from DHLib.StoreIntoDatabase import store_articles
 #import constant
 from Config import N_TAG, N_TITLE, C_N_TAG
 from Config import ARTICLE_URL as article_base_url
@@ -74,7 +73,6 @@ def main():
     print('Downloading and store file, this part can take several minutes ;)')
 
     #Download data and store into database
-    from StoreIntoDatabase import store_articles
     store_articles(article_base, context_article)
 
     ######MATLAB PART FOR COMPARE

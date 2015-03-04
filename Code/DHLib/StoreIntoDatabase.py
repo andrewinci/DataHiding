@@ -2,7 +2,7 @@ import os
 import sqlite3
 import sys
 
-from Tagger import tag
+from DHLib.TextMining import tag
 from Config import MIN_IMAGE_SIZE
 
 def __initializeDB__(db):
