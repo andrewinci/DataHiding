@@ -95,6 +95,7 @@ sqlite3.execute('insert into comparated_image values(1,?,?,?,?,?,?,?)',imgbase.s
 cont= cont +1;
 end
 end
+sqlite.close();
 clc;
 clear;
 exit
