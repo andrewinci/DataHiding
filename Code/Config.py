@@ -1,5 +1,5 @@
 #article
-ARTICLE_URL = 'http://www.bbc.com/news/world-europe-30708237'
+ARTICLE_URL = 'http://www.bbc.com/news/world-europe-31669061'
 
 #number of article to be downloaded by title (multiplo di 10)
 N_TITLE = 10
