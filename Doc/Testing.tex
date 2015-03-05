@@ -68,6 +68,8 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 
+\usepackage{graphicx}
+\usepackage{subcaption}
 
 % \setlength{\columnseprule}{0,1mm}
 
@@ -667,6 +669,7 @@ Considerated the consisted number of similarity to manually check ($\sim 2000$ o
   \item \textbf{BBC} - \emph{Charlie Hebdo attack: Three days of terror} \footnote{\url{http://www.bbc.com/news/world-europe-30708237}}
   \item \textbf{MailOnline} - \emph{ISIS knew burning Jordanian pilot alive would spark backlash in Islamic world - so prepared a list of justifications beforehand} \footnote{\url{http://www.dailymail.co.uk/news/article-2938886/}}
   \item \textbf{NBC} - \emph{Turkish Airlines Jet Skids Off Foggy Runway in Kathmandu, Nepal} \footnote{\url{http://www.nbcnews.com/news/world/turkish-airlines-jet-skids-foggy-runway-kathmandu-nepal-n316956}}
+  \item \textbf{BBC} - \emph{Russia opposition politician Boris Nemtsov shot dead} \footnote{http://www.bbc.com/news/world-europe-31669061}
 \end{enumerate}
 
 After the Check Data, we get these results :
@@ -674,13 +677,90 @@ After the Check Data, we get these results :
 \begin{center}
 \begin{tabular}{|c|c|c|}
 \hline
-Test Number & \# founded images & \# similar images \\
+Test Number & \# Total images & \# Similar images \\
 \hline\hline
 1 & $5616$ & $81$ \\    \hline
 2 & $1010$ & $32$ \\    \hline
-3 & $67$ & $32$    \\ \hline
+3 & $55$ & $6$    \\ \hline
+4 & $1064$ & $23$ \\ \hline
 \end{tabular}
 \end{center}
+
+From the manual classification, we plotted a rappresentation on the plan (\emph{SURF} value $\times$ Correlation) where the red dots will classify the similar images and the blu the non similar ones. We excluded the images with the same url because these have a fixed $(1.0 , 1.0)$ coordinate.\\
+
+\begin{figure}[!ht]
+\begin{subfigure}{.25\textwidth}
+  \begin{center}
+  \includegraphics[keepaspectratio,width=1\textwidth]{1}\\
+{News 1}
+  \end{center}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+  \begin{center}
+  \includegraphics[keepaspectratio,width=1\textwidth]{2}\\
+{News 2}
+  \end{center}
+\end{subfigure}
+\-\\
+\begin{subfigure}{.25\textwidth}
+  \begin{center}
+  \includegraphics[keepaspectratio,width=1\textwidth]{3}\\
+  {News 3}
+  \end{center}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+  \begin{center}
+  \includegraphics[keepaspectratio,width=1\textwidth]{4}\\
+  {News 4}
+  \end{center}
+\end{subfigure}
+
+\caption{SURF / Correlation}\label{newssurfcorr}
+\end{figure}
+
+
+In the union of all the plot \ref{newssurfcorrgen} we see a really condensed cloud of image in a low SURF measure and in a $[-0.5,0,5]$ correlation interval.\\
+Note that there's some similar images that, after a double check with another human-tester, are just been flagged as similar becuase they are \emph{semantically} similar, as we can see in \ref{4simimm}.
+
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[keepaspectratio,width=0.4\textwidth]{4sim}\\
+  \caption{Example of \emph{semantically} similar images}\label{4simimm}
+  \end{center}
+\end{figure}
+
+Around the central cloud, we have isolated point which are for the majority similar and correct image.
+
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[keepaspectratio,width=0.4\textwidth]{1234}\\
+  \caption{General SURF / Correlation}\label{newssurfcorrgen}
+  \end{center}
+\end{figure}
+
+\textbf{\emph{Farci un elisse intorno alla nuvola e dire che quelle fuori sono simili?}}
+
+After this analisis on the corelation, we focus on the \emph{date}-metadata for the similar images for all the three news.
+
+\begin{figure}[!ht]
+\begin{subfigure}{.25\textwidth}
+  \begin{center}
+  \includegraphics[keepaspectratio,width=1\textwidth]{1234t}\\
+  \end{center}
+\end{subfigure}%
+\begin{subfigure}{.25\textwidth}
+  \begin{center}
+  \includegraphics[keepaspectratio,width=1\textwidth]{1234t2}\\
+  \end{center}
+\end{subfigure}
+
+\caption{SURF / Correlation / Original Date - Correlated Date}\label{datemeta3d}
+\end{figure}
+
+From the data we can achieve that some news with similar images have differt \emph{date}-metadata ($0$ means that the date are identical).
+
+\newpage
+
 
 \subsection{Threshold-like only}
 

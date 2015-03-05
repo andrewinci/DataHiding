@@ -82,7 +82,7 @@ mf1 = mf1(1);
 mf2 = size(f2);
 mf2 = mf2(1);
 
-S = double(Stemp)/double(min(mf1,mf2));
+S = 2*double(Stemp)/double(mf1+mf2);
 
 %correlation part
 img1 = imgbase.image;
