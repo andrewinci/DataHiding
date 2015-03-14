@@ -20,3 +20,13 @@ Code/matlab-sqlite3-driver/*
 Code/cache/*
 
 Code/ImageSelector/*
+
+Code/TestTool/Link1/cache
+
+Code/TestTool/Link1/ha.html
+
+*.jpg
+
+Code/TestTool/articles.db
+
+Code/view.html
