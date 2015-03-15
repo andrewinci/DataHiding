@@ -26,8 +26,6 @@ def __initializeDB__(db):
        local_path text,
        url text,
        size integer,
-       width integer,
-       height intger,
        foreign key (article_id) references article(id) on update cascade on delete cascade);''')
 
     db.execute('''create table if not exists comparated_image(
@@ -36,10 +34,11 @@ def __initializeDB__(db):
         img_base_path text,
         img_corr_id integer,
         img_corr_path text,
-        SURF real,
+        SURFmin real,
+        SURFmax real,
         correlation real,
+        info text,
         is_similar integer,
-        arg2 real,
         foreign key (img_base_id) references image(id) on update cascade on delete cascade,
         foreign key (img_corr_id) references image(id) on update cascade on delete cascade);''')
 
@@ -81,11 +80,7 @@ def __download_image__(data_link, path):
     except:
         print('error for download: ' + str(data_link))
         return None
-    #return the image name
-    #TODO:get the image's width and height
-    img_width = 0
-    img_height = 0
-    return {'local_path': path + img_name,'url': data_link,'size': img_size,'width': img_width,'height': img_height}
+    return {'local_path': path + img_name,'url': data_link,'size': img_size}
 
 
 def __save_article__(ar):
@@ -131,8 +126,8 @@ def store_articles(article_base, context_articles):
     images_base = __save_images_from_article__(article_base)
     #store into db
     for img in images_base:
-        article_db.execute('insert into image values(NULL,?,?,?,?,?,?);',
-                           [article_base_id, img['local_path'], img['url'],img['size'],img['width'],img['height']])
+        article_db.execute('insert into image values(NULL,?,?,?,?);',
+                           [article_base_id, img['local_path'], img['url'],img['size']])
 
     for ar in context_articles:
         #save article
@@ -147,7 +142,7 @@ def store_articles(article_base, context_articles):
         result = __save_images_from_article__(ar)
         #store into db
         for img in result:
-            article_db.execute('insert into image values(NULL,?,?,?,?,?,?);',
-                               [article_id, img['local_path'], img['url'], img['size'],img['width'],img['height']])
+            article_db.execute('insert into image (article_id, local_path, url, size) values (?,?,?,?);',
+                               [article_id, img['local_path'], img['url'], img['size'] ])
     article_db.commit()
     article_db.close()

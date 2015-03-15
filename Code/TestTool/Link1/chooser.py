@@ -1,6 +1,53 @@
 #!/usr/local/bin/python3
 import sqlite3
 
+def computesimilarity():
+
+    sh = db.execute("""select
+    image_base.url,
+    image_corr.url,
+    comparated_image.SURF as 'S',
+    comparated_image.correlation as 'corr',
+    comparated_image.is_similar as 'is_sim',
+    comparated_image.arg2,
+    comparated_image.img_base_id,
+    comparated_image.img_corr_id
+    from comparated_image
+    inner join image as image_base on image_base.id = comparated_image.img_base_id
+    inner join image as image_corr on image_corr.id = comparated_image.img_corr_id
+    order by S""").fetchall()
+
+    sh = db.execute('select SURF,correlation,is_similar, arg2 from comparated_image').fetchall();
+
+    for x in sh:
+        #variable result from query
+        minSurf = x[1]
+        correlation = x[2]
+        is_sim=str(x[3])
+        maxSurf = x[4]
+
+        if is_sim=='2':
+            #no face in both image
+            if(correlation>1/2 and maxSurf+minSurf>0.35):
+                is_sim ='1'
+            if(pow(correlation,2)>1/2):
+                is_sim ='1'
+            if(maxSurf + minSurf > 0.4):
+                is_sim ='1'
+        elif is_sim == '1':
+            #common face
+            sim="yes"
+        else:
+            #no common face
+            is_sim ='0'
+        if is_sim == '2':
+            is_sim='0'
+
+        #update database
+        db.execute('update comparated_image set is_similar = ? where img_base_id = ? and img_corr_id = ?',[str(is_sim),img_base_id, img_corr_id])
+    db.commit()
+    db.close()
+
 def printresult(db):
 
     sh = db.execute("""select
@@ -55,19 +102,20 @@ def printresult(db):
         info = 'none'
         img_base_id = x[6]
         img_corr_id = x[7]
-        #sbool = 0.225<=SURF<=1
-        #cbool = (pow(correlation,2)>1/2)
-        #arg2bool = arg2 >0.15
 
-        #lastbool = (pow(abs(correlation),2))>1/2 or arg2bool
+        #TODO: remove if all work
         if is_sim=='2':
             #no face in both image
             sim="nc"
-            if (pow(correlation,2)>1/2):
+            if(correlation>1/2 and maxSurf+minSurf>0.35):
+                sim ="yes"
+                info = "correlation>1/2 and maxSurf+minSurf"
+                is_sim ='1'
+            if(pow(correlation,2)>1/2):
                 sim ="yes"
                 info = "correlation"
                 is_sim ='1'
-            if(maxSurf == 1 and minSurf==1):
+            if(maxSurf + minSurf > 0.4):
                 sim = "yes"
                 info = "max and min SURF"
                 is_sim ='1'
@@ -80,6 +128,10 @@ def printresult(db):
             is_sim ='0'
             sim="no"
             info = "face detection"
+
+        if is_sim == '2':
+            is_sim='0'
+
         #Web page for show the result
         #Make div
         f.write("<div class="+sim+">")
@@ -89,10 +141,10 @@ def printresult(db):
         f.write("<h1>"+sim+"</h1><h2> minSURF:"+ str(minSurf) + " Correlation:" + str(correlation) +" IsSimilar:"+is_sim+" Arg2:"+str(maxSurf)+" info:"+info +"</H2> <br/><br/>")
         #close div
         f.write("</div>")
-
         #update database
         db.execute('update comparated_image set is_similar = ? where img_base_id = ? and img_corr_id = ?',[str(is_sim),img_base_id, img_corr_id])
     f.close()
+    db.commit()
     db.close()
     from subprocess import call
     call(["open", "view.html"]);

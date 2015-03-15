@@ -1,5 +1,9 @@
 #article
-ARTICLE_URL = 'http://www.bbc.com/news/world-europe-30708237'
+ARTICLE_URL = 'http://www.telegraph.co.uk/news/worldnews/australiaandthepacific/vanuatu/11472065/Cyclone-Pam-Dozens-feared-dead-in-Vanuatu-in-one-of-worst-storms-in-Pacific-history.html'
+#bin laden
+#'http://www.dailymail.co.uk/news/article-2280575/Osama-bin-Laden-More-photos-terror-leaders-body-uncovered.html'
+
+#'http://www.bbc.com/news/world-europe-30708237'
 
 #number of article to be downloaded by title (multiplo di 10)
 N_TITLE = 10

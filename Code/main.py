@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 import os
 from newspaper import Article
 #used for search on google
@@ -10,6 +11,8 @@ from DHLib.StoreIntoDatabase import store_articles
 #import constant
 from Config import N_TAG, N_TITLE, C_N_TAG
 from Config import ARTICLE_URL as article_base_url
+#import image chooser
+from DHLib.Chooser import computesimilarity
 
 def article_list_from_link_list(link_list):
     articles_list=[]
@@ -72,11 +75,15 @@ def main():
 
     #Run matlab for compare the image
     from subprocess import call
-    call(["matlab", "-nosplash -nodisplay -nojvm -r ImageCompare"]);
-    from printComparization import printresult
+    call(["cd", " DHLib"]);
+    call(["matlab", "-nodesktop -nosplash -r \"cd DHLib/; ImageCompare\""]);
+
+    #Compute similarity
     import sqlite3
     db = sqlite3.connect('cache/articles.db')
+    computesimilarity(db)
+    from DHLib.Viewer import printresult
     printresult(db)
-
+    db.close()
 if __name__ == '__main__':
     main()

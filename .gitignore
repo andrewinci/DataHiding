@@ -16,6 +16,7 @@ Doc/Testing.pdf
 Code/google_scraper.db
 
 Code/DHLib/matlab-sqlite3-driver/*
+
 Code/matlab-sqlite3-driver/*
 
 Code/cache/*
@@ -26,7 +27,7 @@ Code/TestTool/*
 
 *.jpg
 
-Code/TestTool/articles.db
+Code/TestTool/*
 
 Code/view.html
 
