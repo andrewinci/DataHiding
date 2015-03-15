@@ -15,18 +15,19 @@ Doc/Testing.pdf
 
 Code/google_scraper.db
 
+Code/DHLib/matlab-sqlite3-driver/*
 Code/matlab-sqlite3-driver/*
 
 Code/cache/*
 
 Code/ImageSelector/*
 
-Code/TestTool/Link1/cache
-
-Code/TestTool/Link1/ha.html
+Code/TestTool/*
 
 *.jpg
 
 Code/TestTool/articles.db
 
 Code/view.html
+
+Code/TestTool/Link1/chooser.py
