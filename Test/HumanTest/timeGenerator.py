@@ -1,151 +1,110 @@
 import sqlite3
+import datetime
+import sys
+
+
+def timeToString(time):
+    return datetime.datetime.fromtimestamp(time).strftime('%Y,%m,%d')
 
 def queryDB(db,query):
 	return sqlite3.connect(db).execute(query).fetchall()
 
-def saveHTML(dataBase , dateCorr, dbName):
-
-	dran = [min(dateCorr + [dataBase]), max(dateCorr+ [dataBase])]
-
-	dateC = (''.join([ " new Date("+str(i)+") ,"  for i in dateCorr ]))[0:-1]
-
-	out_file = open("TimeVisualizator/time.html","w")
-
-	g = """
-<!DOCTYPE html>
-<meta charset="utf-8">
-<html>
-    <head>
-        <link rel="stylesheet" href="style.css" />
-        <style type="text/css">
-        body {
-            font-family: verdana, sans-serif;
-        }
-        </style>
-    </head>
-    <body>
-        <div style="text-align: center">
-            <h1>TimeVisualizator - """ + dbName + """</h1>
+def saveJSONP(dataBase, newsBase, newsCorr):
+    out_file = open("TimeVisualizator/time.jsonp","w")
+    out_file.write("""
+storyjs_jsonp_data = {
+    "timeline":
+    {
+        "headline":"TimeVisualizator",
+        "type":"default",
+        "text":"<p>"""+ db +""" - """ + newsBase['title'] + """</p>",
+        "date": [
+            {
+                "startDate":\""""+ newsBase['data'] +"""\",
+                "endDate":\""""+ newsBase['data'] +"""\",
+                "headline": "<b><a href='"""+ newsBase['url'] +"""' target='_blank'>""" + newsBase['title'] + """</a></b>",
+                "text":" """+ ''.join(["<img src='"+i+"' height='300' width='300' /> <br/> <hr /><br/>" for i in newsBase['images']]) +""" "
+            }""" + ''.join([""",{
+                "startDate":\""""+ j['data'] +"""\",
+                "endDate":\""""+ j['data'] +"""\",
+                "headline": "<a href='"""+ j['url'] +"""' target='_blank'>""" + j['title'] + """</a>",
+                "text":" """+ ''.join(["<img src='"+i[0]+"' height='250' width='250' /> <img src='"+i[1]+"' height='250' width='250' /> <br/><hr /><br/>" for i in j['images']]) +""" "
+            }""" for j in newsCorr]) +"""
+        ]
         
+        ,
+        "era": [
+                {
+                    "startDate":\""""+ newsBase['data'] +"""\",
+                    "endDate":\""""+ newsBase['dataF'] +"""\",
+                    "headline":"Original News"
+                }
 
-        <div id="chart_placeholder"></div>
-        <br/>
-        <div id="legend"></div>
-    </div>    
-        <br />
-        """ + """<script src="d3.js"></script>
-        <script src="eventDrops.js"></script>
-        
-        <script>
-            var chartPlaceholder = document.getElementById('chart_placeholder');
-            var names = ["Original News", "Correlated News"];
-
-            var data = [
-			  { name: "Base News", dates: [new Date("""+ str(dataBase) +""")]},
-			  { name: "Corr News", dates: ["""+ dateC +"""] }
-			];
-
-            
-            var color = d3.scale.category20();
-
-            var locale = d3.locale({
-                "decimal": ",",
-                "thousands": " ",
-                "grouping": [3],
-                "dateTime": "%A %e %B %Y, %X",
-                "date": "%d/%m/%Y",
-                "time": "%H:%M:%S",
-                "periods": ["AM", "PM"],
-                "days": ["domenica", "lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"],
-                "shortDays": ["D", "L", "M", "Me", "G", "V", "S"],
-                "months": ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
-                "shortMonths": ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"]
-            });
-
-            var graph = d3.chart.eventDrops()
-            	.start(new Date(""" + str(dran[0] -100000000) + """))
-                .end(new Date(""" + str(dran[1]   +100000000) + """))
-                .minScale(0.5)
-                .maxScale(100)
-                .locale(locale)
-                .eventColor(function (datum, index) {
-                    if (datum.getTime() < """ + str(dataBase) + """) {
-                        return 'red';
-                    }
-                    else if (datum.getTime() > """ + str(dataBase) + """){
-                    	return 'orange';
-                    }
-                    return 'green';
-                })
-                .width(1000)
-                .margin({ top: 100, left: 200, bottom: 0, right: 0 })
-                .axisFormat(function(xAxis) {
-                    xAxis.ticks(5);
-                })
-                .eventHover(function(el) {
-                    var series = el.parentNode.firstChild.innerHTML;
-                    var timestamp = d3.select(el).data();
-                    document.getElementById('legend').innerHTML = '[' + timestamp + ']';
-                })
-                .eventZoom(function (scale) {
-                    var limit = scale.domain();
-                    var period = parseInt((limit[1] - limit[0]) / (60 * 60 * 1000) );
-                })
-                ;
-
-            var element = d3.select(chartPlaceholder).append('div').datum(data);
-            graph(element);
-
-            var updateDelimiter = function (value) {
-                graph.hasDelimiter(!graph.hasDelimiter())(element);
-            };
-
-        </script>
-
-    </body>
-</html>
-	
-	"""
-
-	# <div id="content">
-    # <div id="left">
-    # </div>
-    # </div>
-        
-	out_file.write(g)
-	out_file.close()
+            ]
+    }
+}
+        """)
+    out_file.close()
 
 
 def createFile(db):
-	kk = queryDB(db, """
-		select temp1.url as "Burl", temp2.url as "Surl",temp1.imageUrl as "Biurl", temp2.imageUrl as "Siurl", temp1.data as 'Bdata', temp2.data as 'Sdata' from comparated_image
-		
-		inner join
-			(select article.url, article.data as 'data' , image.id as 'imageid' , image.url as "imageUrl"
-			from image
-			inner join article on image.article_id = article.id
-			where article.data is not null) as temp1
-		on temp1.imageid = comparated_image.img_base_id
+    baseNewsQ = queryDB(db,"""
+        select article.title , article.url, article.data , image.url from article
+        inner join image
+        on image.article_id = article.id
+        where article.is_base = 1;
+        """)
+    try:
+        baseNews = {
+            'title' : baseNewsQ[0][0],
+            'url' : baseNewsQ[0][1],
+            'data' : timeToString(int(baseNewsQ[0][2])),
+            'dataF' : timeToString(86400+ int(baseNewsQ[0][2])),
+            'images' : [ i[3] for i in baseNewsQ]
+        }
+    except:
+        print "There's no information about time."   
+        sys.exit() 
+    
 
-		inner join (select article.url, article.data as 'data' , image.id as 'imageid', image.url as "imageUrl"
-			from image
-			inner join article on image.article_id = article.id
-			where article.data is not null) as temp2
-		on temp2.imageid = comparated_image.img_corr_id
+    corrNewsQ = queryDB(db, """
+        select temp2.title, temp2.url as "Surl", temp2.data as 'Sdata' , temp1.imageUrl as "Biurl", temp2.imageUrl as "Siurl" from comparated_image
+        
+        inner join
+            (select article.id as 'id' , article.url as 'url', article.data as 'data' , image.id as 'imageid' , image.url as "imageUrl"
+            from image
+            inner join article on image.article_id = article.id
+            where article.data is not null) as temp1
+        on temp1.imageid = comparated_image.img_base_id
 
-		where comparated_image.img_base_path != comparated_image.img_corr_path
-		and comparated_image.is_similar = 1
-		and comparated_image.SURF < 1
-		and Burl != Surl;
-	""")
-	if len(kk) != 0:
-		data = int(kk[0][4])*1000
-		dateC = [int(i[5])*1000 for i in kk ]
+        inner join (select article.id as 'id' , article.title as 'title',  article.url as 'url', article.data as 'data' , image.id as 'imageid', image.url as "imageUrl"
+            from image
+            inner join article on image.article_id = article.id
+            where article.data is not null) as temp2
+        on temp2.imageid = comparated_image.img_corr_id
 
-		saveHTML(data,dateC,db)
-	else:
-		print "No date to print"
+        where (comparated_image.is_similar == 1)
+        and temp1.id <> temp2.id
+        order by Surl;
+    """)
+
+    corrNews = []
+    ind = list(set([corrNewsQ[i][1] for i in range(len(corrNewsQ))]))
+
+    for i in ind:
+        imge = []
+        for j in corrNewsQ:
+            if j[1] == i:
+                imge += [(j[3],j[4])]
+        corrNews += [{
+            'title' : j[0],
+            'url' : j[1],
+            'data' : timeToString(int(j[2])),
+            'images' : imge
+        }]
+        
+    saveJSONP(db,baseNews,corrNews)
 
 
-db = "Link4.db"
+db = "articles.db"
 createFile(db)
