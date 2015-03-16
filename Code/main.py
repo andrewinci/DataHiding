@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 import os
 from newspaper import Article
 #used for search on google
@@ -10,6 +11,8 @@ from DHLib.StoreIntoDatabase import store_articles
 #import constant
 from Config import N_TAG, N_TITLE, C_N_TAG
 from Config import ARTICLE_URL as article_base_url
+#import image chooser
+from DHLib.Chooser import computesimilarity
 
 def article_list_from_link_list(link_list):
     articles_list=[]
@@ -20,9 +23,7 @@ def article_list_from_link_list(link_list):
             article.parse()
             if article.text != '' and article.images.__len__()>0:
                 #check if all link are images
-                img_format =['jpg', 'png', 'bmp', 'jpeg']
-                img_list = [i for i in article.images if i.split('.')[-1].lower() in img_format]
-                article.images = img_list
+                article.images = [i for i in article.images if i.split('.')[-1].lower() in ['jpg', 'png', 'bmp', 'jpeg']]
                 articles_list.append(article)
         except:
             print('error in article_list_from_link_list :' + article_link + ' is not an article')
@@ -35,26 +36,24 @@ def main():
         #remove the previous cache file
         shutil.rmtree('cache')
 
-    #load the first article
+    #download and parse the first article
     article_base = Article(article_base_url)
     article_base.download()
     article_base.parse()
     article_title = article_base.title
 
-    ####SEARCH FOR ARTICLE TITLE#######
-    print('Searching article by title:'+ article_title)
     #get similar articles link without the article_base
+    print('Searching article by title:'+ article_title)
     articles_by_title_link = [l for l in searchongoogle(article_title, N_TITLE) if l != article_base_url]
 
     #make parsed article list
     articles_by_title = article_list_from_link_list(articles_by_title_link)
 
-    #####SEARCH FOR TAG########
-    #join tag for doing the research
+    #join tag for doing the research by tag
     tag_research = ' '.join(tag(article_base.text, C_N_TAG))
     print('Tag researched: ', tag_research)
     #get article link searched by tag
-    articles_by_tag_link = [l for l in searchongoogle(tag_research, N_TAG) if l != article_base_url]
+    articles_by_tag_link = [ l for l in searchongoogle(tag_research, N_TAG) if l != article_base_url]
 
     #make parsed article list
     articles_by_tag = article_list_from_link_list(articles_by_tag_link)
@@ -69,15 +68,22 @@ def main():
     #using a TextCompare
     context_article = correlated_article(article_base, articles_by_title, articles_by_tag)
     print("Found " + str(context_article.__len__()) + " correlated article")
-
     print('Downloading and store file, this part can take several minutes ;)')
 
     #Download data and store into database
     store_articles(article_base, context_article)
 
-    ######MATLAB PART FOR COMPARE
+    #Run matlab for compare the image
     from subprocess import call
-    call(["matlab", "-nosplash -nodisplay -nojvm -r ImageCompare"]);
+    call(["cd", " DHLib"]);
+    call(["matlab", "-nodesktop -nosplash -r \"cd DHLib/; ImageCompare\""]);
 
+    #Compute similarity
+    import sqlite3
+    db = sqlite3.connect('cache/articles.db')
+    computesimilarity(db)
+    from DHLib.Viewer import printresult
+    printresult(db)
+    db.close()
 if __name__ == '__main__':
     main()

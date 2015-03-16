@@ -26,8 +26,6 @@ def __initializeDB__(db):
        local_path text,
        url text,
        size integer,
-       width integer,
-       height intger,
        foreign key (article_id) references article(id) on update cascade on delete cascade);''')
 
     db.execute('''create table if not exists comparated_image(
@@ -36,8 +34,10 @@ def __initializeDB__(db):
         img_base_path text,
         img_corr_id integer,
         img_corr_path text,
-        SURF real,
+        SURFmin real,
+        SURFmax real,
         correlation real,
+        info text,
         is_similar integer,
         foreign key (img_base_id) references image(id) on update cascade on delete cascade,
         foreign key (img_corr_id) references image(id) on update cascade on delete cascade);''')
@@ -80,16 +80,7 @@ def __download_image__(data_link, path):
     except:
         print('error for download: ' + str(data_link))
         return None
-    #return the image name
-    #TODO:get the image's width and height
-    img_width = 0
-    img_height = 0
-    return {
-        'local_path': path + img_name,
-        'url': data_link,
-        'size': img_size,
-        'width': img_width,
-        'height': img_height}
+    return {'local_path': path + img_name,'url': data_link,'size': img_size}
 
 
 def __save_article__(ar):
@@ -107,12 +98,7 @@ def __save_article__(ar):
     f = open(f_title, 'w')
     f.write(ar.text)
     #TODO:Set the number of tag to be stored
-    return {
-        'local_path': f_title,
-        'title': ar.title,
-        'url': str(ar.url),
-        'tags': ' '.join(tag(ar.text, 10)),
-        'data': data}
+    return {'local_path': f_title,'title': ar.title,'url': str(ar.url),'tags': ' '.join(tag(ar.text, 10)),'data': data}
 
 
 def store_articles(article_base, context_articles):
@@ -128,53 +114,35 @@ def store_articles(article_base, context_articles):
 
     #save and store the base article
     result = __save_article__(article_base)
+
     article_db.execute('insert into article_base values(NULL,?)', [result['url']])
     #get the base article id
     article_base_id = article_db.execute('select id from article_base order by id desc limit 1;').fetchone()[0]
-    #save the base article
+
+    #save the base article into database
     article_db.execute('insert into article values(NULL,?,?,?,?,?,?,?);',
-                       [article_base_id,
-                        result['local_path'],
-                        result['title'],
-                        result['url'],
-                        result['tags'],
-                        result['data'],
-                        '1'])
+                       [article_base_id, result['local_path'], result['title'], result['url'], result['tags'],result['data'],'1'])
     #get the images
     images_base = __save_images_from_article__(article_base)
     #store into db
     for img in images_base:
-        article_db.execute('insert into image values(NULL,?,?,?,?,?,?);',
-                           [article_base_id,
-                            img['local_path'],
-                            img['url'],
-                            img['size'],
-                            img['width'],
-                            img['height']])
+        article_db.execute('insert into image values(NULL,?,?,?,?);',
+                           [article_base_id, img['local_path'], img['url'],img['size']])
 
     for ar in context_articles:
         #save article
         result = __save_article__(ar)
+
         article_db.execute('insert into article values(NULL,?,?,?,?,?,?,?);',
-                           [article_base_id,
-                            result['local_path'],
-                            result['title'],
-                            result['url'],
-                            result['tags'],
-                            result['data'],
-                            '0'])
+                           [article_base_id, result['local_path'], result['title'], result['url'], result['tags'], result['data'],'0'])
+
         #get article id
         article_id = article_db.execute('select id from article order by id desc limit 1;').fetchone()[0]
         #get the images
         result = __save_images_from_article__(ar)
         #store into db
         for img in result:
-            article_db.execute('insert into image values(NULL,?,?,?,?,?,?);',
-                               [article_id,
-                                img['local_path'],
-                                img['url'],
-                                img['size'],
-                                img['width'],
-                                img['height']])
+            article_db.execute('insert into image (article_id, local_path, url, size) values (?,?,?,?);',
+                               [article_id, img['local_path'], img['url'], img['size'] ])
     article_db.commit()
     article_db.close()
