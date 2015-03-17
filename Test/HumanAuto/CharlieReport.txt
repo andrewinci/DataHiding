@@ -1,0 +1,13 @@
+#Charlie Hebdo attack: Three days of terror
+link: http://www.bbc.com/news/world-europe-30708237
+folder: Charlie
+numero immagini nell'articolo: 24
+numero articoli correlati: 17
+numero immagini in articoli correlati: 223
+numero immagini simili trovate :89
+
+##Falsi positivi :
+da fare
+
+##Veri negativi :
+da fare

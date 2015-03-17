@@ -1,0 +1,59 @@
+#Russia opposition politician Boris Nemtsov shot dead
+link: http://www.bbc.com/news/world-europe-31669061
+folder: Russia
+numero immagini nell'articolo: 7
+numero articoli correlati: 17
+numero immagini in articoli correlati: 90
+numero immagini simili trovate :10
+
+##Falsi positivi :
+nessuno
+
+##Veri negativi :
+nessuno
+
+##Note :
+(stesso luogo ma da inquadrature e momenti diversi anche se vicini)
+base :http://news.bbcimg.co.uk/media/images/81303000/jpg/_81303973_026095253-1.jpg
+corr:http://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2015/2/28/1425112334228/662aaf74-77d9-4c95-9f43-c04e1faf5856-2060x1236.jpeg
+app say:no
+info:face detection
+corr:0.1055359450618481
+surfmin:0.03927492447129909
+surfmax:0.011361153594057243
+
+(stesso viso ma differente immagine)
+base :http://news.bbcimg.co.uk/media/images/81303000/jpg/_81303981_81303980.jpg
+corr:http://news.bbcimg.co.uk/media/images/81303000/jpg/_81303972_008434359-1.jpg
+app say:no
+info:face detection
+corr:-0.03853190092585397
+surfmin:0.014563106796116505
+surfmax:0.010526315789473684
+
+(come su)
+base :http://news.bbcimg.co.uk/media/images/81303000/jpg/_81303972_008434359-1.jpg
+corr:http://media.gotraffic.net/images/iWWbcOvWENnA/v18/-1x-1.jpg
+app say:no
+info:surf are 0
+corr:0.5253217987943787
+surfmin:0.009708737864077669
+surfmax:0.0012940795858945326
+
+(pubblicità)
+base :http://news.bbcimg.co.uk/media/images/81687000/jpg/_81687205_81687204.jpg
+corr:http://news.bbcimg.co.uk/media/images/81687000/jpg/_81687205_81687204.jpg
+app say:yes
+info:face detection
+corr:1.0
+surfmin:1.0
+surfmax:1.0
+
+(pubblicità)
+base :http://news.bbcimg.co.uk/media/images/81603000/jpg/_81603347_mri1024.jpg
+corr:http://news.bbcimg.co.uk/media/images/81603000/jpg/_81603347_mri1024.jpg
+software say:yes
+info:face detection
+corr:1.0
+surfmin:1.0
+surfmax:1.0

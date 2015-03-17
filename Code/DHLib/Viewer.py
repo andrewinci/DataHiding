@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3
 import sqlite3
 
-def printresult(db):
+def printresult(db,directory):
 
     sh = db.execute("""select
     image_base.url,
@@ -17,9 +17,15 @@ def printresult(db):
     order by is_sim""").fetchall()
 
     #Web page for show the result
-    f = open('view.html','w')
+    f = open(directory+'view.html','w')
+    #open head
+    f.write("<head>")
+    #add title
+    f.write("<title>"+directory+"</title>")
     #add style
-    f.write("""<head><style>h1 {
+    f.write("""
+    <style>
+    h1 {
     color:red;
     font-family:courier;
     font-size:200%;
@@ -30,20 +36,33 @@ def printresult(db):
     font-size:100%;
     }
     .yes {
+
     text-align: center;
     background:rgba(46, 255, 5, 0.23);
     }
 
     .no {
+
     text-align: center;
     background:rgba(147, 3, 14, 0.34);
     }
 
     .nc {
+
     text-align: center;
     background:rgba(255, 250, 46, 0.76);
     }
+
+    img {
+    margin : 13px
+    }
     </style></head>""")
+    #add script
+    f.write('''<script type="text/javascript">
+    function printError(error) {
+    alert(error);
+    }
+    </script>''')
 
     for x in sh:
         imgbaseurl = x[0]
@@ -62,7 +81,12 @@ def printresult(db):
         #add image base, image corr
         f.write("<img src=\""+imgbaseurl+"\" width=\"auto\" height=\"400\">&nbsp;"+
                 "<img src=\""+imgcorrurl+"\" width=\"auto\" height=\"400\">")
-        #add properties
+        #button
+        tempstr = "error for base :"+imgbaseurl+" and corr:"+imgcorrurl+" software say:"+sim+'info:'+info+' corr:'+str(correlation)+' surfmin:'+str(surfmin)+' surfmax:'+str(surfmax)
+
+        f.write("<input id=\"clickMe\" type=\"button\" value=\"error\" onclick=\"printError('"+tempstr+"');\" />")
+
+        #Add properties
         f.write("<h1>"+sim+"</h1><h2> minSURF:"+ str(surfmin) +
                 " Correlation:" + str(correlation) +" IsSimilar:"+str(is_sim)+
                 " maxSURF:"+str(surfmax)+" info:"+info +"</H2> <br/><br/>")
@@ -70,10 +94,17 @@ def printresult(db):
         f.write("</div>")
     f.close()
     from subprocess import call
-    call(["open", "view.html"]);
+    call(["open", directory+"View.html"]);
 
 
 if __name__ == '__main__':
     import sqlite3
-    db = sqlite3.connect('../cache/articles.db')
-    printresult(db)
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--path', help = 'database path')
+    parser.add_argument('--out', help = 'output directory with / at the end')
+    args = parser.parse_args()
+    db_path = args.path if not args.path == None else '../cache/articles.db'
+    directory = args.out if not args.out == None else ''
+    db = sqlite3.connect(db_path)
+    printresult(db,directory)

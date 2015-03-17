@@ -1,0 +1,64 @@
+#ISIS knew burning Jordanian pilot would spark backlash in Islamic world
+link: http://www.dailymail.co.uk/news/article-2938886/
+folder: ISIS
+numero immagini nell'articolo: 10
+numero articoli correlati: 15
+numero immagini in articoli correlati: 170
+numero immagini simili trovate :24
+
+##Falsi positivi :
+nessuno
+
+##Veri negativi :
+
+!!!(cropping inserito in un'insieme di altre immagini)
+base :http://i.dailymail.co.uk/i/pix/2015/02/03/254EF00000000578-2938199-image-a-14_1422983843758.jpg
+corr:http://rack.0.mshcdn.com/media/ZgkyMDE1LzAyLzAzLzEyL0pvcmRhbmlhblBpLmRhOTYzLmpwZwpwCXRodW1iCTEyMDB4OTYwMD4/b3faf03b/b6c/Jordanian-Pilot-Site.jpg
+software say:no
+info:face detection
+corr:0.014201599580510831
+surfmin:0.32786885245901637
+surfmax:0.13100436681222707
+
+!!!(come su)
+error for base :http://i.dailymail.co.uk/i/pix/2015/02/04/254EEA6E00000578-0-image-a-6_1423013335933.jpg and corr:http://rack.0.mshcdn.com/media/ZgkyMDE1LzAyLzAzLzEyL0pvcmRhbmlhblBpLmRhOTYzLmpwZwpwCXRodW1iCTEyMDB4OTYwMD4/b3faf03b/b6c/Jordanian-Pilot-Site.jpg software say:noinfo:face detection corr:-0.14878436691927063 surfmin:0.16129032258064516 surfmax:0.12689655172413794
+
+!!!(come su)
+error for base :http://i.dailymail.co.uk/i/pix/2015/02/04/254EEA6E00000578-0-image-a-6_1423013335933.jpg and corr:http://i.dailymail.co.uk/i/pix/2015/02/03/25506C6200000578-0-image-a-8_1423005976223.jpg software say:noinfo:face detection corr:0.004300444052176642 surfmin:0.12048192771084337 surfmax:0.08283479061205706
+
+!!!(come su)
+error for base :http://i.dailymail.co.uk/i/pix/2015/02/03/254EEA6E00000578-2938199-image-a-1_1423005195842.jpg and corr:http://rack.0.mshcdn.com/media/ZgkyMDE1LzAyLzAzLzEyL0pvcmRhbmlhblBpLmRhOTYzLmpwZwpwCXRodW1iCTEyMDB4OTYwMD4/b3faf03b/b6c/Jordanian-Pilot-Site.jpg software say:noinfo:face detection corr:-0.17036386198064732 surfmin:0.12135176651305683 surfmax:0.09025992573550415
+
+!!!(come su)
+error for base :http://i.dailymail.co.uk/i/pix/2015/02/03/254EEA6E00000578-2938199-image-a-1_1423005195842.jpg and corr:http://i.dailymail.co.uk/i/pix/2015/02/03/25506C6200000578-0-image-a-8_1423005976223.jpg software say:noinfo:face detection corr:0.009816910237285944 surfmin:0.07630522088353414 surfmax:0.055636896046852125
+
+-----
+
+!!!(stessa immagine da controllare)
+error for base :http://i.dailymail.co.uk/i/pix/2015/02/04/254EEA6E00000578-0-image-a-6_1423013335933.jpg and corr:http://i.dailymail.co.uk/i/pix/2015/02/03/254EEA6E00000578-2938199-image-a-1_1423005195842.jpg software say:noinfo:face detection corr:0.5645388627000609 surfmin:0.37327188940092165 surfmax:0.3563049853372434
+
+!!!(come su)
+error for base :http://i.dailymail.co.uk/i/pix/2015/02/04/254EEA6E00000578-0-image-a-6_1423013335933.jpg and corr:http://i.dailymail.co.uk/i/pix/2015/02/03/254EEA6E00000578-2938199-image-a-1_1423005195842.jpg software say:noinfo:face detection corr:0.5645388627000609 surfmin:0.37327188940092165 surfmax:0.3563049853372434
+
+!!!(come su)
+error for base :http://i.dailymail.co.uk/i/pix/2015/02/03/254EEA6E00000578-2938199-image-a-1_1423005195842.jpg and corr:http://i.dailymail.co.uk/i/pix/2015/02/04/254EEA6E00000578-0-image-a-6_1423013335933.jpg software say:noinfo:face detection corr:0.5638660586664876 surfmin:0.35407066052227343 surfmax:0.3379765395894428
+
+##Note :
+(pubblicità)
+base :http://i.dailymail.co.uk/i/pix//promoboxes/btn_ipadapp_5_308x111.png
+corr:http://i.dailymail.co.uk/i/pix//promoboxes/btn_ipadapp_5_308x111.png
+software say:yes
+info:face detection
+corr:1.0
+surfmin:1.0
+surfmax:1.0
+
+
+??(momento e inquadratura vicini)
+error for base :http://i.dailymail.co.uk/i/pix/2015/02/03/video-undefined-2550741500000578-538_636x358.jpg and corr:http://i2.cdn.turner.com/cnnnext/dam/assets/150203152713-sot-jordan-king-abdullah-isis-pilot-hostage-burned-alive-00000322-large-169.jpg software say:noinfo:face detection corr:0.305037386866966 surfmin:0.04142011834319527 surfmax:0.022727272727272728
+
+??(come su)
+error for base :http://i.dailymail.co.uk/i/pix/2015/02/03/video-undefined-2550741500000578-538_636x358.jpg and corr:http://i.dailymail.co.uk/i/pix/2015/02/03/254F9E6F00000578-2938199-image-m-15_1422994489864.jpg software say:noinfo:face detection corr:0.3285940096178666 surfmin:0.020134228187919462 surfmax:0.013835511145272867
+
+??(come su ma inserita fra altre immagini)
+error for base :http://i.dailymail.co.uk/i/pix/2015/02/04/254EE29800000578-0-Brutal_The_footage_which_is_titled_Healing_the_Believers_Chests_-a-1_1423011433734.jpg and corr:http://i.dailymail.co.uk/i/pix/2015/02/03/25506C6200000578-0-image-a-8_1423005976223.jpg software say:noinfo:face detection corr:-0.017474333730718244 surfmin:0.09547738693467336 surfmax:0.06637554585152838
