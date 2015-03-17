@@ -1,0 +1,56 @@
+#Turkish Airlines plane skids off runway at Kathmandu Airport
+link: http://www.news.com.au/travel/travel-updates/turkish-airlines-plane-skids-off-runway-at-kathmandu-airport/story-e6frfq80-1227248700381
+folder: TurkishAirlines
+numero immagini nell'articolo: 5
+numero articoli correlati: 14
+numero immagini in articoli correlati: 40
+numero immagini simili trovate :7
+
+##Falsi positivi :
+
+(stesso aereo ma in situazioni diverse)
+base :http://resources0.news.com.au/images/2015/03/05/1227248/700256-9f3ed160-c2b5-11e4-9d92-97de7eaded95.jpg
+corr:http://i.dailymail.co.uk/i/pix/2015/03/04/article-doc-w3wa-6WmOgZ8Xh-HSK1-729_634x378.jpg
+software say:yes
+info:face detection
+corr:0.8075815327287534
+surfmin:0.013157894736842105
+surfmax:0.0036900369003690036
+
+(come su)
+base :http://resources0.news.com.au/images/2015/03/05/1227248/700256-9f3ed160-c2b5-11e4-9d92-97de7eaded95.jpg
+corr:http://rack.0.mshcdn.com/media/ZgkyMDE1LzAzLzA0LzQ1L25lcGFsLjllZTg5LmpwZwpwCXRodW1iCTEyMDB4NjI3IwplCWpwZw/3620b76e/6ef/nepal.jpg
+software say:yes
+info:face detection
+corr:0.7475558282958669
+surfmin:0.013157894736842105
+surfmax:0.0051813471502590676
+
+##Veri negativi :
+(!!! inquadrature e momenti diversi ma molto vicini)
+base :http://resources3.news.com.au/images/2015/03/05/1227248/700327-946628a6-c2b5-11e4-9d92-97de7eaded95.jpg
+corr:http://news.bbcimg.co.uk/media/images/81408000/jpg/_81408678_026153324-1.jpg
+software say:no
+info:face detection
+corr:0.620798573256967
+surfmin:0.03313508920985556
+surfmax:0.02937853107344633
+
+(!!! come sopra)
+base :http://resources3.news.com.au/images/2015/03/05/1227248/700327-946628a6-c2b5-11e4-9d92-97de7eaded95.jpg
+corr:http://i.dailymail.co.uk/i/pix/2015/03/04/article-doc-w3wa-6WmOgZ8Xh-HSK1-729_634x378.jpg
+software say:no
+info:face detection
+corr:0.4475740815533976
+surfmin:0.02575107296137339
+surfmax:0.012345679012345678
+
+##Note :
+(??? non sono la stessa immagine ne il cropping ma sono attimi molto vicini)
+base :http://resources0.news.com.au/images/2015/03/05/1227248/699900-ac969258-c2b5-11e4-9d92-97de7eaded95.jpg
+corr:http://media4.s-nbcnews.com/i/newscms/2015_10/914431/150304-turkish-airlines-01_cc3f6c009fc2f281185972de0ac5c77f.jpg
+software say:no
+info:surf are 0
+corr:0.7858556535217646
+surfmin:0.0
+surfmax:0.0

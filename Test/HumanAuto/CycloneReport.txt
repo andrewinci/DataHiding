@@ -1,0 +1,83 @@
+#Cyclone Pam: Dozens feared dead in Vanuatu in 'one of worst storms in Pacific history'
+link: http://www.telegraph.co.uk/news/worldnews/australiaandthepacific/vanuatu/11472065/Cyclone-Pam-Dozens-feared-dead-in-Vanuatu-in-one-of-worst-storms-in-Pacific-history.html
+folder: Cyclone
+numero immagini nell'articolo: 16
+numero articoli correlati: 20
+numero immagini in articoli correlati: 145
+numero immagini simili trovate :47
+
+##Falsi positivi :
+nessuna
+
+##Veri negativi :
+
+base :http://i.telegraph.co.uk/multimedia/archive/03232/Cyclone_Pam_3232407k.jpg
+corr:https://metrouk2.files.wordpress.com/2015/03/1400x931208.jpg
+software say:no
+info:face detection
+corr:0.2867131457909315
+surfmin:0.23863636363636365
+surfmax:0.14600231749710313
+
+base :http://i.telegraph.co.uk/multimedia/archive/03232/Cyclone_Pam_3232407k.jpg
+corr:http://www.independent.co.uk/incoming/article10108113.ece/binary/original/cyclonepam.jpg
+software say:no
+info:face detection
+corr:0.35120605207516087
+surfmin:0.29292929292929293
+surfmax:0.09016712009327633
+
+base :http://i.telegraph.co.uk/multimedia/archive/03232/Cyclone_Pam_3232407k.jpg
+corr:http://www.independent.co.uk/incoming/article10108113.ece/alternates/w620/cyclonepam.jpg
+software say:no
+info:face detection
+corr:0.35291423951225154
+surfmin:0.10493827160493827
+surfmax:0.07981220657276995
+
+base :http://i.telegraph.co.uk/multimedia/archive/03232/Cyclone_Pam_3232407k.jpg
+corr:http://i2.cdn.turner.com/cnnnext/dam/assets/150314034441-tropical-cyclone-pam-super-169.jpg
+software say:no
+info:face detection
+corr:0.3140075253813415
+surfmin:0.15151515151515152
+surfmax:0.14251781472684086
+
+base :http://i.telegraph.co.uk/multimedia/archive/03232/Cyclone_Pam_3232407k.jpg
+corr:http://static2.nydailynews.com/polopoly_fs/1.2149234.1426353202!/img/httpImage/image.jpg_gen/derivatives/article_970/538817439.jpg
+software say:no
+info:face detection
+corr:0.3402874157669439
+surfmin:0.13005050505050506
+surfmax:0.12067955477445812
+
+##Note
+
+Trovata tanta pubblicità
+
+(pubblicità)
+base :http://i.telegraph.co.uk/multimedia/archive/03231/LSE_Executive_Summ_3231503f.jpg
+corr:http://i.telegraph.co.uk/multimedia/archive/03231/LSE_Executive_Summ_3231503f.jpg
+software say:yes
+info:face detection
+corr:1.0
+surfmin:1.0
+surfmax:1.0
+
+(come su)
+base :http://i.telegraph.co.uk/multimedia/archive/03234/birdies_3234028f.jpg
+corr:http://i.telegraph.co.uk/multimedia/archive/03234/birdies_3234028f.jpg
+software say:yes
+info:face detection
+corr:1.0
+surfmin:1.0
+surfmax:1.0
+
+(su)
+base :http://i.telegraph.co.uk/multimedia/archive/02719/Jobs_Logo_220_2719708f.jpg
+corr:http://i.telegraph.co.uk/multimedia/archive/02719/Jobs_Logo_220_2719708f.jpg
+software say:yes
+info:face detection
+corr:1.0
+surfmin:1.01xf
+surfmax:1.0
