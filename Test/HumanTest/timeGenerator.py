@@ -106,5 +106,5 @@ def createFile(db):
     saveJSONP(db,baseNews,corrNews)
 
 
-db = "articles.db"
+db = "Link6.db"
 createFile(db)

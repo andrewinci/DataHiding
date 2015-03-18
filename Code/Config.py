@@ -1,5 +1,8 @@
 #article
-ARTICLE_URL = 'http://www.dailymail.co.uk/news/article-2938886/'
+ARTICLE_URL = 'http://www.bbc.com/news/world-africa-31941672'
+
+# Something
+# http://www.bbc.com/news/world-africa-31941672
 
 #Charlie Hebdo attack: Three days of terror
 #http://www.bbc.com/news/world-europe-30708237
@@ -17,10 +20,10 @@ ARTICLE_URL = 'http://www.dailymail.co.uk/news/article-2938886/'
 #http://www.bbc.com/news/world-europe-31669061
 
 #number of article to be downloaded by title (multiplo di 10)
-N_TITLE = 10
+N_TITLE = 20
 
 #number of article to be downloaded by tags (multiplo di 10)
-N_TAG = 10
+N_TAG = 20
 
 #min image size in byte to be consider
 MIN_IMAGE_SIZE = 20000

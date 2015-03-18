@@ -70,6 +70,7 @@
 
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{rotating}
 
 % \setlength{\columnseprule}{0,1mm}
 
@@ -657,7 +658,7 @@ We operate with three type of test:
 
 \begin{enumerate}
   \item \textbf{Human-like only} : statistically analyse \emph{how} we can choose the threshold given by the function $f(\tau_{\text{SURF}} , \tau_{\text{cor}})$.
-  \item \textbf{Threshold-like only} : analyse the behaviour of the coherence-analyser trying different threshold functions.
+  \item \textbf{Automatic test} : We create a complete automatic tool that decide when two images are similar.
   \item \textbf{Human-Threshold check} : we operate with the same news with all the two test and trace conclusion on the efficency of the scheme.
 \end{enumerate}
 
@@ -680,13 +681,13 @@ After the Check Data, we get these results :
 Test Number & \# Total images & \# Similar images \\
 \hline\hline
 1 & $5616$ & $81$ \\    \hline
-2 & $1010$ & $32$ \\    \hline
+2 & $1010$ & $29$ \\    \hline
 3 & $55$ & $6$    \\ \hline
 4 & $1064$ & $23$ \\ \hline
 \end{tabular}
 \end{center}
 
-From the manual classification, we plotted a rappresentation on the plan (\emph{SURF} value $\times$ Correlation) where the red dots will classify the similar images and the blu the non similar ones. We excluded the images with the same url because these have a fixed $(1.0 , 1.0)$ coordinate.\\
+From the manual classification, we plotted a rappresentation on the plan (\emph{SURF} value $\times$ Correlation) where the red arrow will classify the similar images with start in the minimum value of SURF and arrow in the maximum SURF value, and the blu the non similar ones with the same rule. We excluded the images with the same url because these have a fixed $(1.0 , 1.0)$ arrow.\\
 
 \begin{figure}[!ht]
 \begin{subfigure}{.25\textwidth}
@@ -719,8 +720,7 @@ From the manual classification, we plotted a rappresentation on the plan (\emph{
 \end{figure}
 
 
-In the union of all the plot \ref{newssurfcorrgen} we see a really condensed cloud of image in a low SURF measure and in a $[-0.5,0,5]$ correlation interval.\\
-Note that there's some similar images that, after a double check with another human-tester, are just been flagged as similar becuase they are \emph{semantically} similar, as we can see in \ref{4simimm}.
+We note that the similar images are out of the cloud of arrow. Note that analyzing the non similar arrow out of the cloud, we note that the images are similar in a semantic sense. In this case we have to not consider this non-objective measure.
 
 \begin{figure}[!ht]
   \begin{center}
@@ -729,8 +729,6 @@ Note that there's some similar images that, after a double check with another hu
   \end{center}
 \end{figure}
 
-Around the central cloud, we have isolated point which are for the majority similar and correct image.
-
 \begin{figure}[!ht]
   \begin{center}
   \includegraphics[keepaspectratio,width=0.4\textwidth]{1234}\\
@@ -738,51 +736,103 @@ Around the central cloud, we have isolated point which are for the majority simi
   \end{center}
 \end{figure}
 
-\textbf{\emph{Farci un elisse intorno alla nuvola e dire che quelle fuori sono simili?}}
-
-After this analisis on the corelation, we focus on the \emph{date}-metadata for the similar images for all the three news.
-
-\begin{figure}[!ht]
-\begin{subfigure}{.25\textwidth}
-  \begin{center}
-  \includegraphics[keepaspectratio,width=1\textwidth]{1234t}\\
-  \end{center}
-\end{subfigure}%
-\begin{subfigure}{.25\textwidth}
-  \begin{center}
-  \includegraphics[keepaspectratio,width=1\textwidth]{1234t2}\\
-  \end{center}
-\end{subfigure}
-
-\caption{SURF / Correlation / Original Date - Correlated Date}\label{datemeta3d}
-\end{figure}
-
-From the data we can achieve that some news with similar images have differt \emph{date}-metadata ($0$ means that the date are identical).
-
-\newpage
+Our main problems are created by \emph{face}-images where the similarity of the image is just a face recognization and the SURF can't really help in find similarity.\\
+For these reason we added a face-detector in the threshold-like test to improve the results.
 
 
-\subsection{Threshold-like only}
+\subsection{Automatic test}
 
+Due to the enormous number of different algorithm for similarity, we focus on three different values:
 
-From the statistic obtained by the previous test, we choose as the similarity function
-\[ f(\tau_{\text{SURF}} , \tau_{\text{cor}}) = \xi * \xi^{-1} \]
+\begin{itemize}
+  \item \textbf{SURF} : using
+  \begin{itemize}
+    \item $S_M = \dfrac{2*\text{ number of common feature}}{\text{feature 1st image } + \text{ feature 2nd image}}$ 
+    \item $S_m = \dfrac{\text{number of common feature}}{\min(\text{ feature 1st image } , \text{ feature 2nd image })}$ 
+  \end{itemize}
+  \item \textbf{Correlation value} : 
+  \item \textbf{MSER} : for face recognition 
+\end{itemize}
 
-With these schema, we analysed $n$ news :
+We procede in t way:
+
 \begin{enumerate}
-  \item link1
-  \item $\cdots$
-  \item link$n$
+  \item Load the two images $I_1 , I_2$ to check
+  \item Extract from the two images a set of faces $ \nu_1 , \nu_2 $ that they have
+  \item If $\#\nu_1 \neq 0 , \#\nu_2 \neq 0$ then :
+    \begin{itemize}
+      \item Calculate $S_M$ from the feature of the face
+      \item If $S_M >= 0.5$ or the correlation the two faces is $> 0.8$ then the two images are similar\\
+      Otherwise the two images are not similar
+    \end{itemize}
+    Otherwise :
+    \begin{itemize}
+      \item If correlation $> 0.5$ and $S_M + S_m > 0.35$ then the two images are similar\\
+      \item if $\text{ correlation}^2$ then the two images are similar\\
+      \item if $S_M + S_m > 0.4$ then the two images are similar
+      \item If $S_M <0.01$ and $S_m < 0.01$ then the two images are not similar
+      \item If $(S_M + S_m + \text{ corr. })/3 > 0.21$ and the standard deviation of $S_m, S_M, \text{ corr. } <0.2$ then the images are similar
+    \end{itemize}
+    If two images do not get classified, they are flagged as not similar.
 \end{enumerate}
+
+All the value can be modified for increase or decrese false-positive.\\
+Our schema concentrate in achieve a high similarity on the images.
 
 \subsection{Human-Threshold check}
 
-Using the previous result, we double-controlled with the two methods:
+We analize the automated result from different news:
 
 \begin{enumerate}
-  \item link1
-  \item link2
+  \item \textbf{BBC} - \emph{Charlie Hebdo attack: Three days of terror} \footnote{\url{http://www.bbc.com/news/world-europe-30708237}}
+  \item \textbf{MailOnline} - \emph{ISIS knew burning Jordanian pilot alive would spark backlash in Islamic world - so prepared a list of justifications beforehand} \footnote{\url{http://www.dailymail.co.uk/news/article-2938886/}}
+  \item \textbf{The Telegraph} - \emph{Cyclone Pam: Dozens feared dead in Vanuatu in ``one of worst storms in Pacific history''}\footnote{\url{http://www.telegraph.co.uk/news/worldnews/australiaandthepacific/vanuatu/11472065/Cyclone-Pam-Dozens-feared-dead-in-Vanuatu-in-one-of-worst-storms-in-Pacific-history.html}}
+  \item \textbf{NBC} - \emph{Turkish Airlines Jet Skids Off Foggy Runway in Kathmandu, Nepal} \footnote{\url{http://www.nbcnews.com/news/world/turkish-airlines-jet-skids-foggy-runway-kathmandu-nepal-n316956}}
+  \item \textbf{BBC} - \emph{Russia opposition politician Boris Nemtsov shot dead} \footnote{http://www.bbc.com/news/world-europe-31669061}
 \end{enumerate}
+
+We looked to false-positives and true-negatives.
+
+\begin{center}
+\begin{tabular}{|c||c|c|c|c|c|}
+\hline
+Test Number & 1 & 2 & 3 & 4 & 5 \\ \hline\hline
+ \# total images & 24 & 10 & 16 & 5 & 7 \\ \hline
+ \# correlated news  & 17 & 15 & 20 & 14 & 17 \\ \hline
+ \# correlated images  & 223 & 179 & 145 & 40 & 90 \\ \hline
+ \# similar images found & 89 & 24 & 47 & 7 & 10 \\ \hline
+ \# false positive & 4 & 0 & 0 & 2 & 0 \\ \hline
+ \# true negative & 2 & 8 & 5 & 2 & 0 \\ \hline
+\end{tabular}
+\end{center}
+
+With a relatively small set of correlated news, we get a mean of $22,87\%$ similar images over the total images of the news found.\\
+From these only the $6,61\%$ (in mean) are false positive.\\[0.5cm]
+
+These reasult are really good and are close to the human generated ones.
+
+\subsection{Blind Test}
+
+From a random news on the internet, we used only the automated test and compare the result in a timeline.
+
+\begin{center}
+\textbf{News used :} \textbf{BBC} - \emph{title}\footnote{\url{http://www.bbc.com/news/world-africa-31941672}}
+\end{center}
+
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[keepaspectratio,width=0.4\textwidth]{6}\\
+  \caption{SURF / Corr}
+  \end{center}
+\end{figure}
+
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[keepaspectratio,width=0.4\textwidth]{6tl}\\
+  \caption{TimeLine}
+  \end{center}
+\end{figure}
+
 
 
 

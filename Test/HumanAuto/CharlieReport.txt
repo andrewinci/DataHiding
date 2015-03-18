@@ -6,8 +6,43 @@ numero articoli correlati: 17
 numero immagini in articoli correlati: 223
 numero immagini simili trovate :89
 
-##Falsi positivi :
-da fare
+##Falsi positivi : (he said yes)
+(face error)
+error for base :http://news.bbcimg.co.uk/media/images/80164000/jpg/_80164295_amedycoulibaly.jpg and corr:http://www.hollywoodreporter.com/sites/default/files/imagecache/NFE_Landscape/2015/03/AP216181880037.jpg software say:yesinfo:face detection corr:0.09278409760479231 surfmin:0.06201550387596899 surfmax:0.050473186119873815
 
-##Veri negativi :
-da fare
+(face error)
+error for base :http://news.bbcimg.co.uk/media/images/80164000/jpg/_80164295_amedycoulibaly.jpg and corr:http://news.bbcimg.co.uk/media/images/80122000/jpg/_80122818_suspects.jpg software say:yesinfo:face detection corr:0.5364767405696506 surfmin:0.10526315789473684 surfmax:0.09876543209876543
+
+error for base :http://news.bbcimg.co.uk/media/images/80164000/jpg/_80164295_amedycoulibaly.jpg and corr:http://news.bbcimg.co.uk/media/images/80122000/jpg/_80122818_suspects.jpg software say:yesinfo:face detection corr:0.5364767405696506 surfmin:0.10526315789473684 surfmax:0.09876543209876543
+
+error for base :http://news.bbcimg.co.uk/media/images/80164000/jpg/_80164295_amedycoulibaly.jpg and corr:http://news.bbcimg.co.uk/media/images/80122000/jpg/_80122818_suspects.jpg software say:yesinfo:face detection corr:0.5364767405696506 surfmin:0.10526315789473684 surfmax:0.09876543209876543
+
+
+
+
+
+##Veri negativi : (he said no)
+(cropping collage)
+error for base :http://news.bbcimg.co.uk/media/images/80112000/jpg/_80112949_80113772.jpg and corr:http://i.dailymail.co.uk/i/pix/2015/01/07/video-undefined-247A3F3000000578-292_636x358.jpg software say:noinfo:face detection corr:0.2533850545774074 surfmin:0.20574162679425836 surfmax:0.15302491103202848
+
+(there's the face, another little angulation)
+error for base :http://news.bbcimg.co.uk/media/images/80269000/jpg/_80269427_12victims10.jpg and corr:http://i.dailymail.co.uk/i/pix/2015/01/07/247A7B4200000578-2900259-Bernard_Tignous_Verlhac_was_gunned_down_by_terrorists_today-m-157_1420650252469.jpg software say:noinfo:surf are 0 corr:-0.26453355039184595 surfmin:0.00303951367781155 surfmax:0.002175095160413268
+
+
+
+
+
+
+##Note
+(same place, different moment)
+error for base :http://news.bbcimg.co.uk/media/images/80167000/jpg/_80167035_petrolstationafp.jpg and corr:http://i2.cdn.turner.com/cnnnext/dam/assets/150108100535-nr-report-paris-terror-suspects-gas-station-00011713-large-169.jpg software say:noinfo:face detection corr:0.39325689029361427 surfmin:0.027522935779816515 surfmax:0.012435233160621761
+
+(cropped, flipped and collage)
+error for base :http://news.bbcimg.co.uk/media/images/80271000/jpg/_80271077_025396048-1.jpg and corr:http://cdn.images.express.co.uk/img/dynamic/78/590x/Charlie-Hebdo-siege-two-paris-gunmen-killed-550651.jpg software say:noinfo:face detection corr:-0.16074854797983 surfmin:0.013157894736842105 surfmax:0.002663115845539281
+
+(cropped and near-time)
+error for base :http://news.bbcimg.co.uk/media/images/80232000/jpg/_80232421_image_composite.jpg and corr:http://i.dailymail.co.uk/i/pix/2015/01/07/247BCD7500000578-2900259-image-a-71_1420643665252.jpg software say:noinfo:surf are 0 corr:0.0670886308726447 surfmin:0.005050505050505051 surfmax:0.0044994375703037125
+
+(up)
+error for base :http://news.bbcimg.co.uk/media/images/80232000/jpg/_80232421_image_composite.jpg and corr:http://i.dailymail.co.uk/i/pix/2015/01/07/247A769F00000578-2900259-image-a-62_1420637332528.jpg software say:noinfo:surf are 0 corr:0.03746221189110729 surfmin:0.006711409395973154 surfmax:0.005763688760806916
+
