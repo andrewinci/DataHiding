@@ -83,7 +83,7 @@ def main(link):
     db = sqlite3.connect('cache/articles.db')
     computesimilarity(db)
     from DHLib.Viewer import printresult
-    printresult(db)
+    printresult(db,'')
     db.close()
 
 

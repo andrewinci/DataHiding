@@ -23,6 +23,7 @@ Code/cache/*
 
 Code/ImageSelector/*
 
+<<<<<<< Updated upstream
 Code/TestTool/*
 
 Test/HumanAuto/testing/*
@@ -35,3 +36,6 @@ Code/view.html
 Code/TestTool/Link1/chooser.py
 
 Code/DHLib/view.html
+=======
+Test/HumanAuto/testing/*
+>>>>>>> Stashed changes
