@@ -46,15 +46,17 @@ def __initializeDB__(db):
 
 def __save_images_from_article__(ar):
     # download image
-    image_list = []
-    for img_url in ar.images:
-        img_down_result = __download_image__(img_url, 'cache/image/')
-        if not img_down_result is None:
-            image_list.append(img_down_result)
-    return image_list
+    from DHLib import workerpool
+
+    #Initialize a pool, 5 threads
+    pool = workerpool.WorkerPool(size=8)
+    res = [im for im in pool.map(__download_image__, ar.images) if not im is None]
+    pool.shutdown()
+    pool.wait()
+    return res
 
 
-def __download_image__(data_link, path):
+def __download_image__(data_link, path = 'cache/image/'):
     path = str(path)
     from urllib import request
     import xxhash
@@ -79,7 +81,7 @@ def __download_image__(data_link, path):
             #the image is too small
             return None
     except:
-        print('error for download: ' + str(data_link))
+        print(' - error for download: ' + str(data_link))
         return None
     return {'local_path': path + img_name, 'url': data_link, 'size': img_size}
 
@@ -126,10 +128,13 @@ def store_articles(article_base, context_articles, parent=0):
                        [article_base_id, result['local_path'], result['title'], result['url'], result['tags'], result['data'], '1'])
     #get the images
     images_base = __save_images_from_article__(article_base)
-    #store into db
+    #get last article id
+    last_article_id = article_db.execute('select id from article order by id desc limit 1;').fetchone()[0]
+
+    #store base images into db
     for img in images_base:
         article_db.execute('insert into image values(NULL,?,?,?,?);',
-                           [article_base_id, img['local_path'], img['url'], img['size']])
+                           [last_article_id, img['local_path'], img['url'], img['size']])
 
     for ar in context_articles:
         #save article
@@ -139,12 +144,12 @@ def store_articles(article_base, context_articles, parent=0):
                            [article_base_id, result['local_path'], result['title'], result['url'], result['tags'], result['data'], '0'])
 
         #get article id
-        article_id = article_db.execute('select id from article order by id desc limit 1;').fetchone()[0]
+        last_article_id = article_db.execute('select id from article order by id desc limit 1;').fetchone()[0]
         #get the images
         result = __save_images_from_article__(ar)
         #store into db
         for img in result:
             article_db.execute('insert into image (article_id, local_path, url, size) values (?,?,?,?);',
-                               [article_id, img['local_path'], img['url'], img['size']])
+                               [last_article_id, img['local_path'], img['url'], img['size']])
     article_db.commit()
     article_db.close()

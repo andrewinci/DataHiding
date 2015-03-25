@@ -30,7 +30,7 @@ query = strcat('select * from image where article_id in (select id from article 
 imgs_corr_from_sql = sqlite3.execute(query);
 
 %clean previous item
-sqlite3.execute('delete from comparated_image;');
+%sqlite3.execute('delete from comparated_image;');
 
 %Load images base
 h=waitbar(0,'Load images base...');
@@ -49,6 +49,9 @@ Ncorr = Ncorr(2);
 numComp =  Ncorr * Nbase;
 
 waitbar(0,h,'Comparing and store into database...');
+base_id = sqlite3.execute(['select id from article_base order ' ...
+                    'by id desc limit 1;']);
+base_id = base_id.id;
 
 %compare images
 for imgbase=imgs_base
@@ -91,12 +94,12 @@ for imgcorr=imgs_corr
     %visualization and store into database
     perc = double(cont)/double(numComp);
     waitbar(perc,h,'Comparing and store into database...')
-    %fprintf('%d of %d', cont, numComp);
+     %fprintf('%d of %d', cont, numComp);
     sqlite3.execute(['insert into comparated_image ' ...
                      '(article_base_id, img_base_id, img_base_path, ' ...
                      'img_corr_id, img_corr_path, SURFmin, SURFmax, ' ...
-                     'correlation, is_similar, info)  values (1,?,?,?,?,?,?,?,?,?)'],...
-                    imgbase.sql_result.id, ...
+                     'correlation, is_similar, info)  values (?,?,?,?,?,?,?,?,?,?)'],...
+                    base_id, imgbase.sql_result.id, ...
                     imgbase.sql_result.local_path, imgcorr.sql_result.id, ...
                     imgcorr.sql_result.local_path, Surfmin, Surfmax, ...
                     Corr, is_sim, 'face recognition');
