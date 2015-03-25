@@ -25,11 +25,14 @@ def tag(sentence, num):
 
 
 def correlated_article(base_article, articles_by_title_list, article_by_tag_list):
-    return article_by_tag_list+articles_by_title_list
-
+    #remove common link
+    all = articles_by_title_list+article_by_tag_list
+    seen = set()
+    seen_add = seen.add
+    return [x for x in all if not (x.url in seen or seen_add(x.url))]
 
 #########################
-#### NOT USED NOW #######
+#### NOT USED AT NOW #######
 def compare(text1, text2):
     text1_tags = tag(text1, 0)
     text2_tags = tag(text2, 0)

@@ -31,11 +31,14 @@ Test/HumanAuto/testing/*
 
 Code/TestTool/*
 
+Code/cache.old
+
 Code/view.html
 
 Code/TestTool/Link1/chooser.py
 
 Code/DHLib/view.html
+Code/.idea
 =======
 Test/HumanAuto/testing/*
 >>>>>>> Stashed changes

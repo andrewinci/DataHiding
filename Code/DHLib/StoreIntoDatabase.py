@@ -8,7 +8,8 @@ from Config import MIN_IMAGE_SIZE
 def __initializeDB__(db):
     db.execute('''create table if not exists article_base (
        id integer primary key autoincrement,
-       link text);''')
+       link text,
+       parent integer);''')
     db.execute('''create table if not exists article (
        id integer primary key autoincrement,
        article_base_id integer,
@@ -80,14 +81,14 @@ def __download_image__(data_link, path):
     except:
         print('error for download: ' + str(data_link))
         return None
-    return {'local_path': path + img_name,'url': data_link,'size': img_size}
+    return {'local_path': path + img_name, 'url': data_link, 'size': img_size}
 
 
 def __save_article__(ar):
     # save into db
     #get data
     data = ar.publish_date
-    if not ar.publish_date is None:
+    if not data is None:
         #convert into UNIX time
         data = ar.publish_date.date().strftime("%s")
 
@@ -98,10 +99,11 @@ def __save_article__(ar):
     f = open(f_title, 'w')
     f.write(ar.text)
     #TODO:Set the number of tag to be stored
-    return {'local_path': f_title,'title': ar.title,'url': str(ar.url),'tags': ' '.join(tag(ar.text, 10)),'data': data}
+    return {'local_path': f_title, 'title': ar.title, 'url': str(ar.url), 'tags': ' '.join(tag(ar.text, 10)), 'data': data}
 
 
-def store_articles(article_base, context_articles):
+
+def store_articles(article_base, context_articles, parent=0):
     # make directory structure
     if not os.path.exists('cache/text/'):
         os.makedirs('cache/text/')
@@ -115,26 +117,26 @@ def store_articles(article_base, context_articles):
     #save and store the base article
     result = __save_article__(article_base)
 
-    article_db.execute('insert into article_base values(NULL,?)', [result['url']])
+    article_db.execute('insert into article_base values(NULL,?,?)', [result['url'], str(parent)])
     #get the base article id
     article_base_id = article_db.execute('select id from article_base order by id desc limit 1;').fetchone()[0]
 
     #save the base article into database
     article_db.execute('insert into article values(NULL,?,?,?,?,?,?,?);',
-                       [article_base_id, result['local_path'], result['title'], result['url'], result['tags'],result['data'],'1'])
+                       [article_base_id, result['local_path'], result['title'], result['url'], result['tags'], result['data'], '1'])
     #get the images
     images_base = __save_images_from_article__(article_base)
     #store into db
     for img in images_base:
         article_db.execute('insert into image values(NULL,?,?,?,?);',
-                           [article_base_id, img['local_path'], img['url'],img['size']])
+                           [article_base_id, img['local_path'], img['url'], img['size']])
 
     for ar in context_articles:
         #save article
         result = __save_article__(ar)
 
         article_db.execute('insert into article values(NULL,?,?,?,?,?,?,?);',
-                           [article_base_id, result['local_path'], result['title'], result['url'], result['tags'], result['data'],'0'])
+                           [article_base_id, result['local_path'], result['title'], result['url'], result['tags'], result['data'], '0'])
 
         #get article id
         article_id = article_db.execute('select id from article order by id desc limit 1;').fetchone()[0]
@@ -143,6 +145,6 @@ def store_articles(article_base, context_articles):
         #store into db
         for img in result:
             article_db.execute('insert into image (article_id, local_path, url, size) values (?,?,?,?);',
-                               [article_id, img['local_path'], img['url'], img['size'] ])
+                               [article_id, img['local_path'], img['url'], img['size']])
     article_db.commit()
     article_db.close()

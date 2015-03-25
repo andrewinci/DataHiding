@@ -20,8 +20,14 @@ addpath('DHLib/')
 % sqlite3.make('all');
 
 sqlite3.open(dbfile);
-imgs_base_from_sql = sqlite3.execute('select * from image where article_id in (select id from article where is_base = 1);');
-imgs_corr_from_sql = sqlite3.execute('select * from image where article_id in (select id from article where is_base = 0);');
+last_base_id = sqlite3.execute('select id from article_base order by id desc limit 1;');
+last_base_id=int2str(uint8(last_base_id.id));
+query = strcat(['select * from image where article_id in (select id ' ...
+                'from article where is_base = 1 and article_base_id ='], last_base_id,' );');
+imgs_base_from_sql = sqlite3.execute(query);
+
+query = strcat('select * from image where article_id in (select id from article where is_base = 0 and article_base_id = ', last_base_id,');');
+imgs_corr_from_sql = sqlite3.execute(query);
 
 %clean previous item
 sqlite3.execute('delete from comparated_image;');

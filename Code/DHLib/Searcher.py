@@ -16,7 +16,8 @@ def searchongoogle(text, num):
             'sel_browser': 'chrome',
         },
         'GLOBAL': {
-            'do_caching': 'False'
+            'do_caching': 'False',
+            'verbosity': 0
         }
     }
     try:
