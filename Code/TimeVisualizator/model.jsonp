@@ -1,0 +1,20 @@
+storyjs_jsonp_data = {
+	"timeline":
+	{
+		"headline":"TimeVisualizator",
+		"type":"default",
+		"text":"<p></p>",
+		"asset": {
+			"caption":"Caption text goes here"
+		},
+		"date": [
+			{
+				"startDate":"2011,12,10",
+				"endDate":"2011,12,10",
+				"headline":"Titolo",
+				"text":"<p> Contenuto </p>"
+			}
+		]
+		
+	}
+}

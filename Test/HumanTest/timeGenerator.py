@@ -27,7 +27,7 @@ storyjs_jsonp_data = {
             }""" + ''.join([""",{
                 "startDate":\""""+ j['data'] +"""\",
                 "endDate":\""""+ j['data'] +"""\",
-                "headline": "<a href='"""+ j['url'] +"""' target='_blank'>""" + j['title'] + """</a>",
+                "headline": "<a href='"""+ j['url'] +"""' target='_blank'>""" + j['title'] + """ - """ + str(j['parent']) + """ iteration </a>",
                 "text":" """+ ''.join(["<img src='"+i[0]+"' height='250' width='250' /> <img src='"+i[1]+"' height='250' width='250' /> <br/><hr /><br/>" for i in j['images']]) +""" "
             }""" for j in newsCorr]) +"""
         ]
@@ -39,7 +39,23 @@ storyjs_jsonp_data = {
                     "endDate":\""""+ newsBase['dataF'] +"""\",
                     "headline":"Original News"
                 }
+                
+                """+   ''.join([""",{
+                "startDate":\""""+ j['data'] +"""\",
+                "endDate":\""""+ j['dataF'] +"""\",
+                "headline": \"""" + str(j['parent']) + """ parent"
+            }""" if int(j['parent']) == 1 else "" for j in newsCorr]) +"""
 
+                """+   ''.join([""",{
+                "startDate":\""""+ j['data'] +"""\",
+                "endDate":\""""+ j['dataF'] +"""\",
+                "headline": \"""" + str(j['parent']) + """ parent"
+            }""" if int(j['parent']) == 2 else "" for j in newsCorr]) +"""
+                """+   ''.join([""",{
+                "startDate":\""""+ j['data'] +"""\",
+                "endDate":\""""+ j['dataF'] +"""\",
+                "headline": \"""" + str(j['parent']) + """ parent"
+            }""" if int(j['parent']) == 2 else "" for j in newsCorr]) +"""
             ]
     }
 }
@@ -59,29 +75,32 @@ def createFile(db):
             'title' : baseNewsQ[0][0],
             'url' : baseNewsQ[0][1],
             'data' : timeToString(int(baseNewsQ[0][2])),
-            'dataF' : timeToString(86400+ int(baseNewsQ[0][2])),
+            'dataF' : timeToString(100000+ int(baseNewsQ[0][2])),
             'images' : [ i[3] for i in baseNewsQ]
         }
     except:
-        print "There's no information about time."   
+        print ("There's no information about time.")
         sys.exit() 
     
 
     corrNewsQ = queryDB(db, """
-        select temp2.title, temp2.url as "Surl", temp2.data as 'Sdata' , temp1.imageUrl as "Biurl", temp2.imageUrl as "Siurl" from comparated_image
+        select temp2.title, temp2.url as "Surl", temp2.data as 'Sdata' , temp1.imageUrl as "Biurl", temp2.imageUrl as "Siurl" , article_base.parent from comparated_image
         
         inner join
-            (select article.id as 'id' , article.url as 'url', article.data as 'data' , image.id as 'imageid' , image.url as "imageUrl"
+            (select article.id as 'id', article.article_base_id as 'fid' , article.url as 'url', article.data as 'data' , image.id as 'imageid' , image.url as "imageUrl"
             from image
             inner join article on image.article_id = article.id
             where article.data is not null) as temp1
         on temp1.imageid = comparated_image.img_base_id
 
-        inner join (select article.id as 'id' , article.title as 'title',  article.url as 'url', article.data as 'data' , image.id as 'imageid', image.url as "imageUrl"
+        inner join (select article.id as 'id', article.article_base_id as 'fid' , article.title as 'title',  article.url as 'url', article.data as 'data' , image.id as 'imageid', image.url as "imageUrl"
             from image
             inner join article on image.article_id = article.id
             where article.data is not null) as temp2
         on temp2.imageid = comparated_image.img_corr_id
+
+        inner join article_base on
+        temp2.fid = article_base.id
 
         where (comparated_image.is_similar == 1)
         and temp1.id <> temp2.id
@@ -100,11 +119,8 @@ def createFile(db):
             'title' : j[0],
             'url' : j[1],
             'data' : timeToString(int(j[2])),
-            'images' : imge
+            'dataF' : timeToString(int(j[2]) + 100000),
+            'images' : imge,
+            'parent' : j[5]
         }]
-        
     saveJSONP(db,baseNews,corrNews)
-
-
-db = "Link6.db"
-createFile(db)

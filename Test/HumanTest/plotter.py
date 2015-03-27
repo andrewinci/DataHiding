@@ -38,15 +38,17 @@ def qpComparated(db,draw = True):
 	yi = []
 	ys = []
 
+
 	for x in ij:
-		if x[3] == 0:
-			xi += [x[0]]
-			xi2 += [x[0]-x[1]]
-			yi += [x[2]]
-		else:
-			xs += [x[0]]
-			xs2 += [x[0]-x[1]]
-			ys += [x[2]]
+		if ( (x[0] is not None ) & (x[1] is not None) & (x[2] is not None)):
+			if x[3] == 0:
+				xi += [x[0]]
+				xi2 += [x[0]-x[1]]
+				yi += [x[2]]
+			else:
+				xs += [x[0]]
+				xs2 += [x[0]-x[1]]
+				ys += [x[2]]
 
 
 	# Plotting
@@ -146,7 +148,6 @@ def qpComparatedAll(dbes, draw=True):
 	# Plot Compared graph
 
 	for db in dbes:
-		print "Compared "+ db
 		xi[dbes.index(db)] , xi2[dbes.index(db)] , yi[dbes.index(db)] , xs[dbes.index(db)] , xs2[dbes.index(db)] , ys[dbes.index(db)] = qpComparated(db,draw=draw)
 
 	# Plotting
@@ -198,6 +199,6 @@ def qpComparatedAll(dbes, draw=True):
 
 # All you need is the list of dbes
 # dbes = ["Link"+str(i+1)+".db" for i in range(4)]
-dbes = ["Link6.db"]
+dbes = ["Link1.db"]
 
 qpComparatedAll(dbes)
