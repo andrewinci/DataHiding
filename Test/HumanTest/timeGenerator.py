@@ -17,7 +17,7 @@ storyjs_jsonp_data = {
     {
         "headline":"TimeVisualizator",
         "type":"default",
-        "text":"<p>"""+ db +""" - """ + newsBase['title'] + """</p>",
+        "text":"<p>"""+ dataBase +""" - """ + newsBase['title'] + """</p>",
         "date": [
             {
                 "startDate":\""""+ newsBase['data'] +"""\",
@@ -68,7 +68,9 @@ def createFile(db):
         select article.title , article.url, article.data , image.url from article
         inner join image
         on image.article_id = article.id
-        where article.is_base = 1;
+        where article.is_base = 1
+        and article.id = 1
+        order by article.id asc ;
         """)
     try:
         baseNews = {

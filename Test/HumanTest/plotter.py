@@ -43,11 +43,11 @@ def qpComparated(db,draw = True):
 		if ( (x[0] is not None ) & (x[1] is not None) & (x[2] is not None)):
 			if x[3] == 0:
 				xi += [x[0]]
-				xi2 += [x[0]-x[1]]
+				xi2 += [x[1]]
 				yi += [x[2]]
 			else:
 				xs += [x[0]]
-				xs2 += [x[0]-x[1]]
+				xs2 += [x[1]]
 				ys += [x[2]]
 
 
@@ -59,9 +59,10 @@ def qpComparated(db,draw = True):
 	plt.axis([-0.05,1.05,-1.05,1.05])
 
 	for i in range(len(xi)):
-		plt.axes().arrow(xi[i], yi[i], xi2[i] ,0.00001,  fc='b', ec='b' , length_includes_head=True, head_width=0.01 , head_length=0.05)
+		plt.plot([xi[i], xi2[i]], [yi[i], yi[i]] ,  color = 'blue', marker = 'o')
 	for i in range(len(xs)):
-		plt.axes().arrow(xs[i], ys[i], (xs2[i]) ,0.00001,  fc='r', ec='r', length_includes_head=True, head_width=0.01 , head_length=0.05)
+		plt.plot([xs[i], xs2[i]], [ys[i], ys[i]] ,  color = 'r', marker = 'o')
+		
 	# plt.plot(xi, yi, marker='o', linestyle='None', color='b')
 	# plt.plot(xs, ys, marker='o', linestyle='None', color='r')
 	
@@ -158,9 +159,10 @@ def qpComparatedAll(dbes, draw=True):
 
 	for db in dbes:
 		for i in range(len(xi[dbes.index(db)])):
-			plt.axes().arrow(xi[dbes.index(db)][i], yi[dbes.index(db)][i], (xi2[dbes.index(db)][i]), 0.00001,  fc='b', ec='b', length_includes_head=True, head_width=0.01 , head_length=0.05)
+			plt.plot([xi[dbes.index(db)][i], xi2[dbes.index(db)][i] ], [yi[dbes.index(db)][i], yi[dbes.index(db)][i]] ,  color='b', marker='o')
 		for i in range(len(xs[dbes.index(db)])):
-			plt.axes().arrow(xs[dbes.index(db)][i], ys[dbes.index(db)][i], (xs2[dbes.index(db)][i] ), 0.00001,  fc='r', ec='r', length_includes_head=True, head_width=0.01 , head_length=0.05)
+			plt.plot([xs[dbes.index(db)][i], xs2[dbes.index(db)][i] ], [ys[dbes.index(db)][i], ys[dbes.index(db)][i]] ,  color='r', marker='o')
+			
 		
 
 		# plt.plot(xi[dbes.index(db)], yi[dbes.index(db)], marker='o', linestyle='None', color='b')
@@ -199,6 +201,6 @@ def qpComparatedAll(dbes, draw=True):
 
 # All you need is the list of dbes
 # dbes = ["Link"+str(i+1)+".db" for i in range(4)]
-dbes = ["Link1.db"]
+dbes = ["Charlie.db","Cyclone.db","ISIS.db","TurkishAirlines.db","Russia.db"]
 
 qpComparatedAll(dbes)

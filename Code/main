@@ -123,7 +123,7 @@ def main(link, parent=0):
                 print(' + ' + link)
 
             for link in arwithcommonimg:
-                if parent + 1 < 3:
+                if parent + 1 < 1:
                     print('Starting - ' + link)
                     main(link, parent + 1)
                     #from DHLib.Viewer import printresult
