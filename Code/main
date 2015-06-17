@@ -1,8 +1,8 @@
 #!/usr/local/bin/python3
 import os
 import sqlite3
+import DHLib.mynewspaper as mynewspaper
 from newspaper import Article
-
 # used for search on google
 from DHLib.Searcher import searchongoogle
 # used for find tag in a text
@@ -22,6 +22,9 @@ def __parse_article__(article_link):
     article.download()
     try:
         article.parse()
+        if article.text == '':
+            article.set_text(mynewspaper.gettext(article.url))
+
         if article.text != '' and article.images.__len__() > 0:
             #check if all link are images
             article.images = [i for i in article.images if
@@ -62,6 +65,8 @@ def main(link, parent=0):
         article_base = Article(base_link)
         article_base.download()
         article_base.parse()
+        if article_base.text == '':
+            article_base.set_text(mynewspaper.gettext(article_base.url))
         article_title = article_base.title
         if None == article_title:
             do = False
@@ -77,6 +82,8 @@ def main(link, parent=0):
 
             #join tag for doing the research by tag
             tag_research = ' '.join(tag(article_base.text, C_N_TAG))
+            if tag_research is '':
+                print('No tag found')
             print('Searching article by tag: {0}'.format(tag_research))
             #get article link searched by tag
             articles_by_tag_link = [l for l in searchongoogle(tag_research, N_TAG) if l != article_base_url]
@@ -123,13 +130,13 @@ def main(link, parent=0):
                 print(' + ' + link)
 
             for link in arwithcommonimg:
-                if parent + 1 < 1:
+                if parent + 1 < 2:
                     print('Starting - ' + link)
                     main(link, parent + 1)
                     #from DHLib.Viewer import printresult
                     #printresult(db, '')
                     #db.close()
-    
+
 
 
 if __name__ == '__main__':
@@ -138,4 +145,4 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--link', help='link to controll')
     args = parser.parse_args()
-    main(args.link) 
+    main(args.link)
