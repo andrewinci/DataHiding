@@ -1,0 +1,4 @@
+GoogleScraper
+nltk
+newspaper3k
+xxhash

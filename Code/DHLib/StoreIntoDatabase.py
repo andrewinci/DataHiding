@@ -3,7 +3,6 @@ import sqlite3
 import sys
 
 from DHLib.TextMining import tag
-from Config import MIN_IMAGE_SIZE
 
 def __initializeDB__(db):
     db.execute('''create table if not exists article_base (

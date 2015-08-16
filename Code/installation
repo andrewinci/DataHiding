@@ -1,0 +1,23 @@
+#Install
+##Python part
++ Make sure you have installed python 3.4 [https://www.python.org/downloads/] and pip 
++ Download [https://github.com/darka91/DataHiding/archive/master.zip]
++ Unzip
+> unzip DataHiding-master.zip
++ Go into code directory 
+> cd DataHiding-master/Code/
++ Install requirements make sure that pip3 works for python3.4 with 
++ Install Pillow external libraries 
+>(mac os) brew install libtiff libjpeg webp little-cms2
+>(linux) sudo apt-get install python3.4-dev libtiff5-dev libjpeg8-dev zlib1g-dev \
+    libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk
+
+> sudo pip3 install -r requirements.txt
++ Install nltk
+> sudo python3.4 -m nltk.downloader -d /usr/share/nltk_data all
+
+##Matlab part
++ Matlab in command line, we require **Computer Vision System Toolbox**
+> sudo ln -s /Applications/MATLAB*/bin/matlab /usr/local/bin/matlab
+
++ Install sqlite driver following this[https://github.com/kyamagu/matlab-sqlite3-driver]

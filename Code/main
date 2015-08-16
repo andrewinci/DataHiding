@@ -10,11 +10,10 @@ from DHLib.TextMining import tag
 # used for select which article are in context
 from DHLib.TextMining import correlated_article
 from DHLib.StoreIntoDatabase import store_articles
-#import constant
-from Config import N_TAG, N_TITLE, C_N_TAG
-from Config import ARTICLE_URL as article_base_url
-#import image chooser
+# import image chooser
 from DHLib.Chooser import computesimilarity
+
+global N_TAG, N_TITLE, C_N_TAG, article_base_url, MIN_IMAGE_SIZE, REC
 
 
 def __parse_article__(article_link):
@@ -26,7 +25,7 @@ def __parse_article__(article_link):
             article.set_text(mynewspaper.gettext(article.url))
 
         if article.text != '' and article.images.__len__() > 0:
-            #check if all link are images
+            # check if all link are images
             article.images = [i for i in article.images if
                               i.split('.')[-1].lower() in ['jpg', 'png', 'bmp', 'jpeg']]
             return article
@@ -36,7 +35,7 @@ def __parse_article__(article_link):
 
 def article_list_from_link_list(link_list):
     from DHLib import workerpool
-    #Initialize a pool, 5 threads
+    # Initialize a pool, 5 threads
     pool = workerpool.WorkerPool(size=8)
     res = [ar for ar in pool.map(__parse_article__, link_list) if not ar is None]
     pool.shutdown()
@@ -48,17 +47,16 @@ def main(link, parent=0):
     print('\nLink: ' + link)
     # if os.path.exists('cache'):
     # import shutil
-    #remove the previous cache file
+    # remove the previous cache file
     # shutil.rmtree('cache')
-    #check if link is present in article
+    # check if link is present in article
     do = True
 
     if os.path.exists('cache/articles.db'):
         db = sqlite3.connect('cache/articles.db')
         if link in [l[0] for l in db.execute('select link from article_base').fetchall()]:
-            print('The link is already present in database')
+            print('The link is already present in database, remove cache')
             do = False
-
 
     if do:
         base_link = link if not link == None else article_base_url
@@ -72,71 +70,70 @@ def main(link, parent=0):
             do = False
 
         if do:
-            #get similar articles link without the article_base
+            # get similar articles link without the article_base
             print('Searching article by title: ' + article_title)
             articles_by_title_link = [l for l in searchongoogle(article_title, N_TITLE) if l != article_base_url]
 
             print('Parsing...')
-            #make parsed article list
+            # make parsed article list
             articles_by_title = article_list_from_link_list(articles_by_title_link)
 
-            #join tag for doing the research by tag
+            # join tag for doing the research by tag
             tag_research = ' '.join(tag(article_base.text, C_N_TAG))
             if tag_research is '':
                 print('No tag found')
             print('Searching article by tag: {0}'.format(tag_research))
-            #get article link searched by tag
+            # get article link searched by tag
             articles_by_tag_link = [l for l in searchongoogle(tag_research, N_TAG) if l != article_base_url]
 
-            #make parsed article list
+            # make parsed article list
             articles_by_tag = article_list_from_link_list(articles_by_tag_link)
 
             #####SELECT THE RESULTS#######
-            #simple intersection between them
+            # simple intersection between them
             intersection = [ar for ar in articles_by_tag_link if articles_by_title_link.__contains__(ar)]
             print('There is ' + str(intersection.__len__()) + ' link in the intersection:')
             for article_link in intersection:
                 print('  ' + article_link)
-            #using a TextCompare
+            # using a TextCompare
             context_article = correlated_article(article_base, articles_by_title, articles_by_tag)
             print("Found " + str(context_article.__len__()) + " correlated article")
             print('Downloading and store file, this part can take several minutes ;)')
 
-            #Download data and store into database
+            # Download data and store into database
             store_articles(article_base, context_article, parent)
 
             print('Analysing with matlab...')
-            #Run matlab for compare the image
+            # Run matlab for compare the image
             from subprocess import call
 
             call(["matlab", "-nodesktop -nosplash -r \"cd DHLib/; ImageCompare\" | tail +10"])
 
-            #Compute similarity
+            # Compute similarity
             db = sqlite3.connect('cache/articles.db')
             computesimilarity(db)
 
-            #get similar link started from similar image
+            # get similar link started from similar image
             article_base_id = db.execute('select id from article_base order by id desc limit 1;').fetchone()[0]
             arwithcommonimg = [a[0] for a in db.execute('''select url from article where id in
             (select article_id from image where id in
             (select img_corr_id from comparated_image where is_similar = 1 and article_base_id =''' + str(
                 article_base_id) + '));'
-            ).fetchall()]
+                                                        ).fetchall()]
 
-            #remove duplicate link
+            # remove duplicate link
             print('Next articles :')
             arwithcommonimg = list(set(arwithcommonimg))
             for link in arwithcommonimg:
                 print(' + ' + link)
 
             for link in arwithcommonimg:
-                if parent + 1 < 2:
+                if parent + 1 < REC:
                     print('Starting - ' + link)
                     main(link, parent + 1)
-                    #from DHLib.Viewer import printresult
-                    #printresult(db, '')
-                    #db.close()
-
+                    # from DHLib.Viewer import printresult
+                    # printresult(db, '')
+                    # db.close()
 
 
 if __name__ == '__main__':
@@ -144,5 +141,17 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--link', help='link to controll')
+    parser.add_argument('--recursion', help='number of recursion', default=1)
+
+    parser.add_argument('--n_title', help='number of article to be downloaded by title', default=10)
+    parser.add_argument('--n_tag', help='number of article to be downloaded by tags', default=10)
+    parser.add_argument('--min_image_size', help='min image size in byte to be consider', default=20000)
+    parser.add_argument('--c_n_tag', help='number of tag to be consider in search', default=5)
     args = parser.parse_args()
+    N_TITLE=args.n_title
+    N_TAG = args.n_tag
+    C_N_TAG = args.c_n_tag
+    REC = args.recursion
+    MIN_IMAGE_SIZE = args.min_image_size
+
     main(args.link)
